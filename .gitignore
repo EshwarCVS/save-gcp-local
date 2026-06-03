@@ -1,0 +1,50 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+wheels/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# dataproc-local generated dirs (default locations)
+/data/
+/output/
+/jobs/
+local-data/
+local-output/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Airflow local
+airflow.db
+airflow.cfg
+logs/
+standalone_admin_password.txt
+
+# Secrets — never commit
+.env
+*.key.json
+service-account*.json
