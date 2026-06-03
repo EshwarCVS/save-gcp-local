@@ -67,7 +67,7 @@ Edit the `mapping` dict in `airflow_patch.py`. Use `_noop_execute(label)` for li
 
 ## Pull requests
 
-1. Branch from `main`.
+1. Branch from `master`.
 2. Add/keep tests green (`pytest -q`).
 3. Update docs (README/SETUP/QUICKSTART) if behavior or flags change.
 4. Open the PR with a clear description of the problem and the fix.
