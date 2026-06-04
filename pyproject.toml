@@ -30,7 +30,8 @@ db = ["sqlalchemy>=1.4"]
 airflow = ["apache-airflow>=2.3", "apache-airflow-providers-google>=8.0"]
 # Everything
 all = ["pandas>=1.3", "numpy>=1.20", "sqlalchemy>=1.4"]
-dev = ["pytest>=7", "build", "twine"]
+dev = ["pytest>=7", "build", "twine", "ruff"]
+docs = ["mkdocs-material"]
 
 [project.scripts]
 save-gcp-local = "save_gcp_local.cli:main"
@@ -39,6 +40,7 @@ save-gcp-local = "save_gcp_local.cli:main"
 Homepage = "https://github.com/EshwarCVS/save-gcp-local"
 Repository = "https://github.com/EshwarCVS/save-gcp-local"
 Issues = "https://github.com/EshwarCVS/save-gcp-local/issues"
+Documentation = "https://eshwarcvs.github.io/save-gcp-local"
 
 [tool.setuptools.packages.find]
 where = ["src"]

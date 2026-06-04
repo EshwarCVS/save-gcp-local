@@ -32,6 +32,9 @@ htmlcov/
 local-data/
 local-output/
 
+# MkDocs
+site/
+
 # IDE / OS
 .idea/
 .vscode/
