@@ -22,7 +22,7 @@ The core test suite has **no external dependencies** — no Airflow, Docker, or 
 ## Project layout
 
 ```
-src/dataproc_local/
+src/save_gcp_local/
   config.py          # all settings, resolved from env vars
   runner.py          # generic Spark runner (Docker/Podman/local). No Airflow.
   resolver.py        # finds job files across many roots (repo, subfolders, JARs)
@@ -43,7 +43,7 @@ Design rule: **`runner.py` must never import Airflow.** Keeping the runner Airfl
 Subclass `DataProvider`, implement `materialize`, and register it:
 
 ```python
-from dataproc_local.providers import register, DataProvider
+from save_gcp_local.providers import register, DataProvider
 
 @register
 class MyProvider(DataProvider):

@@ -14,7 +14,7 @@ Custom providers
 ----------------
 Subclass DataProvider, implement materialize(), and register it:
 
-    from dataproc_local.providers import register, DataProvider
+    from save_gcp_local.providers import register, DataProvider
 
     class MyProvider(DataProvider):
         name = "myprovider"

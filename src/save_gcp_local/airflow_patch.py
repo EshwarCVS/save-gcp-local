@@ -15,7 +15,7 @@ import logging
 from .config import Config, load_config
 from .runner import SparkRunner
 
-log = logging.getLogger("dataproc_local.airflow_patch")
+log = logging.getLogger("save_gcp_local.airflow_patch")
 
 _PATCHED = False
 
@@ -26,7 +26,7 @@ def _noop_execute(label: str):
             "[save-gcp-local] %s on task '%s' -> SKIPPED (no GCP cluster, no cost).",
             label, getattr(self, "task_id", "?"),
         )
-        return {"dataproc_local": "skipped", "operator": label}
+        return {"save_gcp_local": "skipped", "operator": label}
     return execute
 
 

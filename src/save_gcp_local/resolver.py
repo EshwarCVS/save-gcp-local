@@ -17,7 +17,7 @@ import logging
 import os
 from typing import List, Optional
 
-log = logging.getLogger("dataproc_local.resolver")
+log = logging.getLogger("save_gcp_local.resolver")
 
 # Common subfolders where jobs live inside an Airflow project.
 DEFAULT_SUBDIRS = ["", "jobs", "spark", "include", "dags", "plugins", "src", "tasks"]

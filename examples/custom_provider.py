@@ -4,7 +4,7 @@ Run with:  --provider faker_rows  (after importing this module somewhere on star
 This is just a template — adapt to your needs.
 """
 
-from dataproc_local.providers import register, DataProvider
+from save_gcp_local.providers import register, DataProvider
 
 
 @register

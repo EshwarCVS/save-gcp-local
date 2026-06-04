@@ -35,9 +35,9 @@ save-gcp-local gen-data --provider synthetic --input prod.csv --output ./data/ev
 save-gcp-local run --dags ./dags --dag my_pipeline --execution-date 2024-06-01
 ```
 
-**Or Airflow plugin** — drop this in `$AIRFLOW_HOME/plugins/dataproc_local_plugin.py`:
+**Or Airflow plugin** — drop this in `$AIRFLOW_HOME/plugins/save_gcp_local_plugin.py`:
 ```python
-from dataproc_local.airflow_plugin import *  # noqa
+from save_gcp_local.airflow_plugin import *  # noqa
 ```
 then boot Airflow and use the UI as usual.
 
