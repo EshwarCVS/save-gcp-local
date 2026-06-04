@@ -13,20 +13,20 @@ body:
     id: command
     attributes:
       label: Command you ran
-      placeholder: dataproc-local run --dag my_pipeline --task transform --dry-run
+      placeholder: save-gcp-local run --dag my_pipeline --task transform --dry-run
     validations:
       required: true
   - type: textarea
     id: logs
     attributes:
       label: Relevant logs
-      description: Include lines starting with [dataproc-local]. Dry-run output is ideal.
+      description: Include lines starting with [save-gcp-local]. Dry-run output is ideal.
       render: shell
   - type: input
     id: versions
     attributes:
       label: Versions
-      placeholder: "dataproc-local 0.1.0, airflow 2.7.3, providers-google 10.9.0, Python 3.10"
+      placeholder: "save-gcp-local 0.1.0, airflow 2.7.3, providers-google 10.9.0, Python 3.10"
     validations:
       required: true
   - type: dropdown

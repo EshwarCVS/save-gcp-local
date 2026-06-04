@@ -1,4 +1,4 @@
-"""Configuration for dataproc-local.
+"""Configuration for save-gcp-local.
 
 All settings come from environment variables so the same config works whether
 the library is invoked via the CLI or auto-loaded as an Airflow plugin.

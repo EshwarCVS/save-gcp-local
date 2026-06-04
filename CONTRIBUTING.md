@@ -28,7 +28,7 @@ src/dataproc_local/
   resolver.py        # finds job files across many roots (repo, subfolders, JARs)
   airflow_patch.py   # monkey-patches Dataproc operators
   airflow_plugin.py  # Airflow plugin entry point (auto-loads the patch)
-  cli.py             # `dataproc-local` command
+  cli.py             # `save-gcp-local` command
   providers/         # pluggable test-data providers
     __init__.py      # registry + NoneProvider
     tabular.py       # SampleProvider, SyntheticProvider (need the [data] extra)
@@ -53,7 +53,7 @@ class MyProvider(DataProvider):
         return dest
 ```
 
-Add a test in `tests/` and it'll show up in `dataproc-local providers`.
+Add a test in `tests/` and it'll show up in `save-gcp-local providers`.
 
 ## Adding support for a new operator
 
@@ -74,4 +74,4 @@ Edit the `mapping` dict in `airflow_patch.py`. Use `_noop_execute(label)` for li
 
 ## Reporting bugs
 
-Open an issue with: your Airflow + provider versions, the operator involved, the command you ran, and the log line starting `[dataproc-local]`. A `--dry-run` command output is especially helpful.
+Open an issue with: your Airflow + provider versions, the operator involved, the command you ran, and the log line starting `[save-gcp-local]`. A `--dry-run` command output is especially helpful.

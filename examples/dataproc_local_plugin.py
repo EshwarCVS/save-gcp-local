@@ -1,4 +1,4 @@
-# Copy this file into $AIRFLOW_HOME/plugins/ to auto-load dataproc-local.
+# Copy this file into $AIRFLOW_HOME/plugins/ to auto-load save-gcp-local.
 # It imports the plugin module, which applies the operator patches on startup.
 #
 # Configure via environment before booting Airflow, e.g.:

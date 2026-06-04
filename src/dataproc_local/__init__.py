@@ -1,4 +1,4 @@
-"""dataproc-local: run Airflow DAGs locally, execute Dataproc/Spark jobs in Docker.
+"""save-gcp-local: run Airflow DAGs locally, execute Dataproc/Spark jobs in Docker.
 
 Public API:
     from dataproc_local import Config, SparkRunner, apply_patches

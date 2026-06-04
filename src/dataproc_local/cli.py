@@ -1,4 +1,4 @@
-"""Command-line interface for dataproc-local.
+"""Command-line interface for save-gcp-local.
 
 Subcommands:
   run        boot patching + run a DAG/task locally (or just set up the env)
@@ -54,7 +54,7 @@ def cmd_run(args) -> int:
 
     from .airflow_patch import apply_patches
     n = apply_patches(load_config())
-    log.info("dataproc-local: patched %d Dataproc operators.", n)
+    log.info("save-gcp-local: patched %d Dataproc operators.", n)
 
     if args.task and args.dag:
         # Run a single task through Airflow's test path.
@@ -93,7 +93,7 @@ def cmd_gen_data(args) -> int:
         limit=args.limit,
     )
     dest = provider.materialize(args.input or "", args.output, **opts)
-    log.info("dataproc-local: wrote test data -> %s (provider=%s)", dest, args.provider)
+    log.info("save-gcp-local: wrote test data -> %s (provider=%s)", dest, args.provider)
     return 0
 
 
@@ -115,7 +115,7 @@ def cmd_providers(args) -> int:
 # -------------------------------------------------------------------- parse
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        prog="dataproc-local",
+        prog="save-gcp-local",
         description="Run Airflow DAGs locally; execute Dataproc/Spark jobs in local Docker.",
     )
     sub = p.add_subparsers(dest="command", required=True)
