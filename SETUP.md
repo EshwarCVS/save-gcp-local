@@ -55,10 +55,10 @@ Pick whichever fits your team.
 ### Option A — from PyPI (once published)
 
 ```bash
-pip install dataproc-local            # core only, zero heavy deps
-pip install "dataproc-local[data]"    # + sample/synthetic data providers (pandas/numpy)
-pip install "dataproc-local[db]"      # + database sources (SQLAlchemy)
-pip install "dataproc-local[all]"     # everything
+pip install save-gcp-local            # core only, zero heavy deps
+pip install "save-gcp-local[data]"    # + sample/synthetic data providers (pandas/numpy)
+pip install "save-gcp-local[db]"      # + database sources (SQLAlchemy)
+pip install "save-gcp-local[all]"     # everything
 ```
 
 ### Option B — from source (clone + editable)
@@ -72,15 +72,15 @@ pip install -e ".[all]"               # editable: your edits take effect immedia
 ### Option C — from the built wheel (offline / internal mirror)
 
 ```bash
-pip install dataproc_local-0.1.0-py3-none-any.whl
+pip install save_gcp_local-0.1.0-py3-none-any.whl
 # or with extras:
-pip install "dataproc_local-0.1.0-py3-none-any.whl[all]"
+pip install "save_gcp_local-0.1.0-py3-none-any.whl[all]"
 ```
 
 Verify:
 
 ```bash
-dataproc-local providers
+save-gcp-local providers
 # core only      -> none
 # with [data]    -> none, sample, synthetic
 ```
@@ -140,11 +140,11 @@ Good for quick, scripted, one-off runs.
 
 ```bash
 # Just apply the interception, then you start Airflow yourself:
-dataproc-local run --jobs-dir ./spark-repo --data-dir ./data
+save-gcp-local run --jobs-dir ./spark-repo --data-dir ./data
 airflow standalone        # trigger tasks in the UI; Dataproc steps run locally
 
 # Or run a whole DAG in one shot:
-dataproc-local run \
+save-gcp-local run \
   --dags ./dags \
   --jobs-dir ./spark-repo \
   --data-dir ./data \
@@ -152,14 +152,14 @@ dataproc-local run \
   --execution-date 2024-06-01
 
 # Or a single task (fast debugging of one step):
-dataproc-local run \
+save-gcp-local run \
   --dags ./dags \
   --dag my_pipeline \
   --task spark_transform \
   --execution-date 2024-06-01
 
 # See exactly what spark-submit WOULD run, without running it:
-dataproc-local run --dag my_pipeline --task spark_transform --dry-run
+save-gcp-local run --dag my_pipeline --task spark_transform --dry-run
 ```
 
 ### Entry point 2: the Airflow plugin (auto-load)
@@ -169,8 +169,8 @@ Good for matching your real flow: boot Airflow, use the UI as normal.
 1. Drop a one-line file into your Airflow plugins folder:
 
 ```python
-# $AIRFLOW_HOME/plugins/dataproc_local_plugin.py
-from dataproc_local.airflow_plugin import *   # noqa
+# $AIRFLOW_HOME/plugins/save_gcp_local_plugin.py
+from save_gcp_local.airflow_plugin import *   # noqa
 ```
 
 2. Export the `DPL_*` vars (section 3).
@@ -179,7 +179,7 @@ from dataproc_local.airflow_plugin import *   # noqa
 On startup the logs show:
 
 ```
-[dataproc-local] Patched N Dataproc operators: DataprocCreateClusterOperator, DataprocSubmitJobOperator, ...
+[save-gcp-local] Patched N Dataproc operators: DataprocCreateClusterOperator, DataprocSubmitJobOperator, ...
 ```
 
 4. Trigger tasks in the UI exactly as before. Variables and Connections resolve normally; only the cluster step is replaced.
@@ -192,18 +192,18 @@ If your jobs read local files you've already staged, skip this entirely (`--prov
 
 ```bash
 # (a) Do nothing — you stage /data yourself
-dataproc-local gen-data --provider none --input mydata.csv --output ./data/events.csv
+save-gcp-local gen-data --provider none --input mydata.csv --output ./data/events.csv
 
 # (b) SAMPLE: a subset of REAL data, exact values preserved
-dataproc-local gen-data --provider sample \
+save-gcp-local gen-data --provider sample \
   --input prod_export.csv --output ./data/events.csv --pct 1
 
 # (c) SYNTHETIC: learn the shape of real data, generate MORE rows (no real values copied)
-dataproc-local gen-data --provider synthetic \
+save-gcp-local gen-data --provider synthetic \
   --input prod_export.csv --output ./data/events.csv --rows 500000
 
 # From a database table instead of a file:
-dataproc-local gen-data --provider sample \
+save-gcp-local gen-data --provider sample \
   --jdbc postgresql://user:pass@host:5432/db --table events \
   --pct 2 --output ./data/events.csv
 ```
@@ -213,7 +213,7 @@ dataproc-local gen-data --provider sample \
 Jobs usually read `gs://bucket/events/2024-06-01.csv`. The runner rewrites that to `/data/events/2024-06-01.csv` inside the container. So write your test data to the matching subpath:
 
 ```bash
-dataproc-local gen-data --provider sample \
+save-gcp-local gen-data --provider sample \
   --input prod.csv \
   --output "$DPL_DATA_DIR/events/2024-06-01.csv" --pct 1
 ```
@@ -224,7 +224,7 @@ If neither sample nor synthetic fits (e.g. you call an internal anonymization AP
 
 ```python
 # myteam_provider.py
-from dataproc_local.providers import register, DataProvider
+from save_gcp_local.providers import register, DataProvider
 
 @register
 class MyProvider(DataProvider):
@@ -243,17 +243,17 @@ Import it before running, then `--provider myteam`.
 Run a single Dataproc task and watch the logs:
 
 ```bash
-dataproc-local run --dag my_pipeline --task spark_transform --execution-date 2024-06-01
+save-gcp-local run --dag my_pipeline --task spark_transform --execution-date 2024-06-01
 ```
 
 You should see:
 
 ```
-[dataproc-local] CreateCluster on task 'create_cluster' -> SKIPPED (no GCP cluster, no cost).
-[dataproc-local] spark_transform (pyspark) -> running locally (runner=docker)
-[dataproc-local] docker run --rm ... spark-submit --master local[*] /jobs/transform.py ...
+[save-gcp-local] CreateCluster on task 'create_cluster' -> SKIPPED (no GCP cluster, no cost).
+[save-gcp-local] spark_transform (pyspark) -> running locally (runner=docker)
+[save-gcp-local] docker run --rm ... spark-submit --master local[*] /jobs/transform.py ...
 [spark] ... your job output ...
-[dataproc-local] spark_transform completed.
+[save-gcp-local] spark_transform completed.
 ```
 
 If you see `Patched 0 operators`, jump to section 9.
@@ -293,10 +293,10 @@ or delete the plugin file. **Your DAGs were never modified**, so production beha
 CLI subcommands:
 
 ```
-dataproc-local run         # apply patches + optionally run a DAG/task
-dataproc-local gen-data    # populate test data via a provider
-dataproc-local patch       # apply patches only (diagnostic)
-dataproc-local providers   # list available data providers
+save-gcp-local run         # apply patches + optionally run a DAG/task
+save-gcp-local gen-data    # populate test data via a provider
+save-gcp-local patch       # apply patches only (diagnostic)
+save-gcp-local providers   # list available data providers
 ```
 
 ---

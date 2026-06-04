@@ -19,7 +19,7 @@ from typing import Dict, List, Optional
 from .config import Config
 from .resolver import JobResolver, build_default_roots
 
-log = logging.getLogger("dataproc_local.runner")
+log = logging.getLogger("save_gcp_local.runner")
 
 
 class SparkRunner:
@@ -140,10 +140,10 @@ class SparkRunner:
     def run_cmd(self, cmd: List[str], label: str) -> int:
         self.cfg.ensure_dirs()
         printable = " ".join(shlex.quote(c) for c in cmd)
-        log.info("[dataproc-local] %s -> running locally (runner=%s)", label, self.cfg.runner)
-        log.info("[dataproc-local] %s", printable)
+        log.info("[save-gcp-local] %s -> running locally (runner=%s)", label, self.cfg.runner)
+        log.info("[save-gcp-local] %s", printable)
         if self.cfg.dry_run:
-            log.info("[dataproc-local] DRY RUN — not executing.")
+            log.info("[save-gcp-local] DRY RUN — not executing.")
             return 0
         proc = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
@@ -153,8 +153,8 @@ class SparkRunner:
             log.info("[spark] %s", line.rstrip())
         proc.wait()
         if proc.returncode != 0:
-            raise RuntimeError(f"[dataproc-local] {label} failed (exit {proc.returncode})")
-        log.info("[dataproc-local] %s completed.", label)
+            raise RuntimeError(f"[save-gcp-local] {label} failed (exit {proc.returncode})")
+        log.info("[save-gcp-local] %s completed.", label)
         return proc.returncode
 
     # ------------------------------------------------- high-level job parsing
@@ -183,7 +183,7 @@ class SparkRunner:
             cmd = self.build_spark_sql(query)
             return self.run_cmd(cmd, f"{label} (spark-sql)")
         log.warning(
-            "[dataproc-local] Unknown job type for %s (keys=%s) — skipping.",
+            "[save-gcp-local] Unknown job type for %s (keys=%s) — skipping.",
             label, list(job.keys()),
         )
         return None

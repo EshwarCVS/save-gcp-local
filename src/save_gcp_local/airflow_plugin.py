@@ -15,14 +15,14 @@ from __future__ import annotations
 
 import logging
 
-log = logging.getLogger("dataproc_local.plugin")
+log = logging.getLogger("save_gcp_local.plugin")
 
 # Apply patches on import.
 try:
     from .airflow_patch import apply_patches
     apply_patches()
 except Exception as e:  # never break Airflow startup
-    log.warning("[dataproc-local] patch on import failed: %s", e)
+    log.warning("[save-gcp-local] patch on import failed: %s", e)
 
 
 # Register a named Airflow plugin so Airflow logs its presence.
@@ -30,7 +30,7 @@ try:
     from airflow.plugins_manager import AirflowPlugin
 
     class DataprocLocalPlugin(AirflowPlugin):
-        name = "dataproc_local"
+        name = "save_gcp_local"
 except Exception:
     # Not inside Airflow; the patch (if applicable) already ran above.
     pass
