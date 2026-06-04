@@ -22,13 +22,13 @@ The core test suite has **no external dependencies** — no Airflow, Docker, or 
 ## Project layout
 
 ```
-src/dataproc_local/
+src/save_gcp_local/
   config.py          # all settings, resolved from env vars
   runner.py          # generic Spark runner (Docker/Podman/local). No Airflow.
   resolver.py        # finds job files across many roots (repo, subfolders, JARs)
   airflow_patch.py   # monkey-patches Dataproc operators
   airflow_plugin.py  # Airflow plugin entry point (auto-loads the patch)
-  cli.py             # `dataproc-local` command
+  cli.py             # `save-gcp-local` command
   providers/         # pluggable test-data providers
     __init__.py      # registry + NoneProvider
     tabular.py       # SampleProvider, SyntheticProvider (need the [data] extra)
@@ -43,7 +43,7 @@ Design rule: **`runner.py` must never import Airflow.** Keeping the runner Airfl
 Subclass `DataProvider`, implement `materialize`, and register it:
 
 ```python
-from dataproc_local.providers import register, DataProvider
+from save_gcp_local.providers import register, DataProvider
 
 @register
 class MyProvider(DataProvider):
@@ -53,7 +53,7 @@ class MyProvider(DataProvider):
         return dest
 ```
 
-Add a test in `tests/` and it'll show up in `dataproc-local providers`.
+Add a test in `tests/` and it'll show up in `save-gcp-local providers`.
 
 ## Adding support for a new operator
 
@@ -74,4 +74,4 @@ Edit the `mapping` dict in `airflow_patch.py`. Use `_noop_execute(label)` for li
 
 ## Reporting bugs
 
-Open an issue with: your Airflow + provider versions, the operator involved, the command you ran, and the log line starting `[dataproc-local]`. A `--dry-run` command output is especially helpful.
+Open an issue with: your Airflow + provider versions, the operator involved, the command you ran, and the log line starting `[save-gcp-local]`. A `--dry-run` command output is especially helpful.

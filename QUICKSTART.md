@@ -5,7 +5,7 @@
 ## 1. Install
 
 ```bash
-pip install "dataproc-local[all]"     # from PyPI (when published)
+pip install "save-gcp-local[all]"     # from PyPI (when published)
 # or from source:
 git clone https://github.com/EshwarCVS/save-gcp-local
 cd save-gcp-local && pip install -e ".[all]"
@@ -23,21 +23,21 @@ export DPL_OUTPUT_DIR=/path/to/output
 
 ```bash
 # subset of real data:
-dataproc-local gen-data --provider sample --input prod.csv --output ./data/events.csv --pct 1
+save-gcp-local gen-data --provider sample --input prod.csv --output ./data/events.csv --pct 1
 # OR generated data matching real shape:
-dataproc-local gen-data --provider synthetic --input prod.csv --output ./data/events.csv --rows 200000
+save-gcp-local gen-data --provider synthetic --input prod.csv --output ./data/events.csv --rows 200000
 ```
 
 ## 4. Run
 
 **CLI:**
 ```bash
-dataproc-local run --dags ./dags --dag my_pipeline --execution-date 2024-06-01
+save-gcp-local run --dags ./dags --dag my_pipeline --execution-date 2024-06-01
 ```
 
-**Or Airflow plugin** — drop this in `$AIRFLOW_HOME/plugins/dataproc_local_plugin.py`:
+**Or Airflow plugin** — drop this in `$AIRFLOW_HOME/plugins/save_gcp_local_plugin.py`:
 ```python
-from dataproc_local.airflow_plugin import *  # noqa
+from save_gcp_local.airflow_plugin import *  # noqa
 ```
 then boot Airflow and use the UI as usual.
 
@@ -45,8 +45,8 @@ then boot Airflow and use the UI as usual.
 
 Look for:
 ```
-[dataproc-local] CreateCluster ... -> SKIPPED (no GCP cluster, no cost).
-[dataproc-local] ... -> running locally (runner=docker)
+[save-gcp-local] CreateCluster ... -> SKIPPED (no GCP cluster, no cost).
+[save-gcp-local] ... -> running locally (runner=docker)
 ```
 
 ## Turn off (back to real GCP)

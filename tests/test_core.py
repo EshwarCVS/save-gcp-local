@@ -2,8 +2,8 @@
 
 import os
 
-from dataproc_local.config import Config
-from dataproc_local.runner import SparkRunner
+from save_gcp_local.config import Config
+from save_gcp_local.runner import SparkRunner
 
 
 def make_runner(tmp_path, runner="local", dry_run=True):
@@ -56,7 +56,7 @@ def test_sample_provider(tmp_path):
     import pandas as pd
     src = tmp_path / "real.csv"
     pd.DataFrame({"a": range(1000)}).to_csv(src, index=False)
-    from dataproc_local.providers import get_provider
+    from save_gcp_local.providers import get_provider
     dest = str(tmp_path / "sample.csv")
     get_provider("sample").materialize(str(src), dest, pct=10, seed=1)
     out = pd.read_csv(dest)
@@ -72,7 +72,7 @@ def test_synthetic_provider_shape(tmp_path):
         "amt": rng.normal(100, 20, 2000),
         "cat": rng.choice(["A", "B"], 2000, p=[0.7, 0.3]),
     }).to_csv(src, index=False)
-    from dataproc_local.providers import get_provider
+    from save_gcp_local.providers import get_provider
     dest = str(tmp_path / "synth.csv")
     get_provider("synthetic").materialize(str(src), dest, rows=4000, seed=0)
     out = pd.read_csv(dest)
@@ -89,7 +89,7 @@ def test_resolver_finds_job_in_repo_subfolder(tmp_path):
     job = repo / "jobs" / "transform.py"
     job.write_text("print('hi')")
 
-    from dataproc_local.resolver import JobResolver
+    from save_gcp_local.resolver import JobResolver
     # roots = the repo root; resolver tries jobs/ subdir automatically
     r = JobResolver([str(repo)])
     # operator referenced it as a relative path or a gs:// path — both resolve
@@ -104,7 +104,7 @@ def test_resolver_external_jar(tmp_path):
     jar = other / "job.jar"
     jar.write_text("fake")
 
-    from dataproc_local.resolver import JobResolver
+    from save_gcp_local.resolver import JobResolver
     r = JobResolver([str(tmp_path / "airflow_repo"), str(other)])
     assert r.resolve("gs://b/job.jar") == str(jar)
 
@@ -122,7 +122,7 @@ def test_runner_mounts_external_dir(tmp_path):
     os.environ["DPL_RUNNER"] = "docker"
     os.environ["DPL_DRY_RUN"] = "true"
 
-    from dataproc_local.resolver import JobResolver
+    from save_gcp_local.resolver import JobResolver
     runner = SparkRunner(Config(), resolver=JobResolver([str(repo)]))
     cmd = runner.build_pyspark("jobs/t.py", ["--in", "gs://b/x.csv"])
     joined = " ".join(cmd)
