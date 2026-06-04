@@ -57,16 +57,18 @@ def cmd_run(args) -> int:
     log.info("save-gcp-local: patched %d Dataproc operators.", n)
 
     if args.task and args.dag:
-        # Run a single task through Airflow's test path.
+        # Use sys.executable so patches, installed packages, and Python version
+        # all match the current process. Plain "airflow" on PATH may be a
+        # different Python environment entirely.
         from subprocess import call
         date = args.execution_date or "2024-01-01"
         log.info("Running task %s.%s for %s", args.dag, args.task, date)
-        return call(["airflow", "tasks", "test", args.dag, args.task, date])
+        return call([sys.executable, "-m", "airflow", "tasks", "test", args.dag, args.task, date])
     if args.dag:
         from subprocess import call
         date = args.execution_date or "2024-01-01"
         log.info("Running full DAG %s for %s", args.dag, date)
-        return call(["airflow", "dags", "test", args.dag, date])
+        return call([sys.executable, "-m", "airflow", "dags", "test", args.dag, date])
 
     log.info(
         "Patching applied. Now start Airflow normally (e.g. `airflow standalone`) "

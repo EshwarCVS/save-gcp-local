@@ -141,3 +141,85 @@ def test_container_engine_explicit(tmp_path):
     cmd = r.build_spark_jar("c.X", ["gs://b/j.jar"], [])
     assert cmd[0] == "podman"
     _os.environ.pop("DPL_CONTAINER_ENGINE", None)
+
+
+def test_spark_submit_cmd_override(tmp_path):
+    os.environ["DPL_SPARK_SUBMIT_CMD"] = "/opt/spark/bin/spark-submit"
+    os.environ["DPL_RUNNER"] = "local"
+    os.environ["DPL_DRY_RUN"] = "true"
+    r = make_runner(tmp_path, runner="local")
+    cmd = r.build_pyspark("gs://b/main.py", [])
+    assert cmd[0] == "/opt/spark/bin/spark-submit"
+    os.environ.pop("DPL_SPARK_SUBMIT_CMD", None)
+
+
+def test_docker_entrypoint_in_cmd(tmp_path):
+    os.environ["DPL_CONTAINER_ENGINE"] = "docker"
+    os.environ["DPL_DOCKER_ENTRYPOINT"] = "/bin/sh"
+    r = make_runner(tmp_path, runner="docker")
+    cmd = r.build_spark_jar("com.X", ["gs://b/j.jar"], [])
+    joined = " ".join(cmd)
+    assert "--entrypoint /bin/sh" in joined
+    os.environ.pop("DPL_DOCKER_ENTRYPOINT", None)
+    os.environ.pop("DPL_CONTAINER_ENGINE", None)
+
+
+def test_docker_entrypoint_absent_by_default(tmp_path):
+    os.environ["DPL_CONTAINER_ENGINE"] = "docker"
+    os.environ.pop("DPL_DOCKER_ENTRYPOINT", None)
+    r = make_runner(tmp_path, runner="docker")
+    cmd = r.build_spark_jar("com.X", ["gs://b/j.jar"], [])
+    assert "--entrypoint" not in cmd
+    os.environ.pop("DPL_CONTAINER_ENGINE", None)
+
+
+def test_mock_stubs_installed_when_provider_missing(tmp_path):
+    """apply_patches() should install sys.modules stubs when google provider absent."""
+    import sys
+    import types
+
+    mod_path = "airflow.providers.google.cloud.operators.dataproc"
+
+    # Remove any existing entry so we can simulate a missing provider
+    saved = {k: v for k, v in sys.modules.items() if k.startswith("airflow")}
+    for k in list(sys.modules.keys()):
+        if k.startswith("airflow"):
+            del sys.modules[k]
+
+    # Also reset the _PATCHED flag so apply_patches runs fresh
+    import save_gcp_local.airflow_patch as ap
+    ap._PATCHED = False
+
+    os.environ["DPL_ENABLED"] = "true"
+    from save_gcp_local.config import Config
+    from save_gcp_local.airflow_patch import apply_patches
+
+    apply_patches(Config())
+
+    assert mod_path in sys.modules, "Stub module should be registered in sys.modules"
+    mod = sys.modules[mod_path]
+    assert hasattr(mod, "DataprocSubmitJobOperator"), "Stub class should exist"
+    assert hasattr(mod, "DataprocSubmitHiveJobOperator"), "Hive stub should exist"
+
+    # Restore
+    ap._PATCHED = False
+    for k in list(sys.modules.keys()):
+        if k.startswith("airflow"):
+            del sys.modules[k]
+    sys.modules.update(saved)
+
+
+def test_extra_noop_operators_config(tmp_path):
+    os.environ["DPL_EXTRA_NOOP_OPERATORS"] = "os.path.join"  # not a real operator, but importable
+    from save_gcp_local.config import Config
+    cfg = Config()
+    assert "os.path.join" in cfg.extra_noop_operators
+    os.environ.pop("DPL_EXTRA_NOOP_OPERATORS", None)
+
+
+def test_extra_submit_operators_config(tmp_path):
+    os.environ["DPL_EXTRA_SUBMIT_OPERATORS"] = "my.pkg.Op,other.pkg.Op2"
+    from save_gcp_local.config import Config
+    cfg = Config()
+    assert cfg.extra_submit_operators == ["my.pkg.Op", "other.pkg.Op2"]
+    os.environ.pop("DPL_EXTRA_SUBMIT_OPERATORS", None)
