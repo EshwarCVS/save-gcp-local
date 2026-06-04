@@ -22,7 +22,7 @@ try:
     from .airflow_patch import apply_patches
     apply_patches()
 except Exception as e:  # never break Airflow startup
-    log.warning("[dataproc-local] patch on import failed: %s", e)
+    log.warning("[save-gcp-local] patch on import failed: %s", e)
 
 
 # Register a named Airflow plugin so Airflow logs its presence.

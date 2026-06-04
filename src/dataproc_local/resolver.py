@@ -91,9 +91,9 @@ class JobResolver:
             return None
         for cand in self._candidates(ref):
             if os.path.isfile(cand):
-                log.debug("[dataproc-local] resolved %r -> %s", ref, cand)
+                log.debug("[save-gcp-local] resolved %r -> %s", ref, cand)
                 return cand
-        log.debug("[dataproc-local] could not resolve %r locally", ref)
+        log.debug("[save-gcp-local] could not resolve %r locally", ref)
         return None
 
     def resolve_or_basename(self, ref: str) -> str:

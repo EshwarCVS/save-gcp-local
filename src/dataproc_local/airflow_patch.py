@@ -23,7 +23,7 @@ _PATCHED = False
 def _noop_execute(label: str):
     def execute(self, context):  # noqa: ANN001
         log.info(
-            "[dataproc-local] %s on task '%s' -> SKIPPED (no GCP cluster, no cost).",
+            "[save-gcp-local] %s on task '%s' -> SKIPPED (no GCP cluster, no cost).",
             label, getattr(self, "task_id", "?"),
         )
         return {"dataproc_local": "skipped", "operator": label}
@@ -54,7 +54,7 @@ def _submit_execute(runner: SparkRunner):
                 getattr(self, "arguments", None),
             )
             return runner.run_cmd(cmd, f"{task_id} (spark-legacy)")
-        log.warning("[dataproc-local] No job spec found on task '%s'; skipping.", task_id)
+        log.warning("[save-gcp-local] No job spec found on task '%s'; skipping.", task_id)
         return None
     return execute
 
@@ -68,7 +68,7 @@ def apply_patches(config: Config = None) -> int:
     config = config or load_config()
 
     if not config.enabled:
-        log.info("[dataproc-local] DPL_ENABLED is false — not patching.")
+        log.info("[save-gcp-local] DPL_ENABLED is false — not patching.")
         return 0
     if _PATCHED:
         return 0
@@ -76,7 +76,7 @@ def apply_patches(config: Config = None) -> int:
     try:
         from airflow.providers.google.cloud.operators import dataproc as dp
     except Exception as e:  # provider missing / not in Airflow
-        log.warning("[dataproc-local] Could not import Dataproc operators: %s", e)
+        log.warning("[save-gcp-local] Could not import Dataproc operators: %s", e)
         return 0
 
     runner = SparkRunner(config)
@@ -107,7 +107,7 @@ def apply_patches(config: Config = None) -> int:
 
     _PATCHED = True
     log.info(
-        "[dataproc-local] Patched %d Dataproc operators: %s",
+        "[save-gcp-local] Patched %d Dataproc operators: %s",
         len(patched), ", ".join(patched) or "(none)",
     )
     return len(patched)
