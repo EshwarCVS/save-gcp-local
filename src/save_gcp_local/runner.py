@@ -82,7 +82,7 @@ class SparkRunner:
 
     # --------------------------------------------------------------- command
     def _spark_submit_prefix(self) -> List[str]:
-        cmd = ["spark-submit", "--master", self.cfg.spark_master]
+        cmd = [self.cfg.spark_submit_cmd, "--master", self.cfg.spark_master]
         if self.cfg.extra_packages:
             cmd += ["--packages", ",".join(self.cfg.extra_packages)]
         if self.cfg.extra_jars:
@@ -95,6 +95,12 @@ class SparkRunner:
         cmd = [engine, "run", "--rm", "--network", self.cfg.docker_network]
         if self.cfg.docker_memory:
             cmd += ["--memory", self.cfg.docker_memory]
+        # Allow overriding the image entrypoint so spark-submit is reachable even
+        # on images (like the official apache/spark image) whose default entrypoint
+        # does not add /opt/spark/bin to PATH.  Set DPL_DOCKER_ENTRYPOINT=""
+        # to clear the entrypoint entirely.
+        if self.cfg.docker_entrypoint != "":
+            cmd += ["--entrypoint", self.cfg.docker_entrypoint]
         cmd += [
             "-v", f"{self.cfg.jobs_dir}:/jobs",
             "-v", f"{self.cfg.data_dir}:/data",

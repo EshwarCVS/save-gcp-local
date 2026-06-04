@@ -121,7 +121,7 @@ export DPL_OUTPUT_DIR=/abs/path/to/output            # mounted to /output
 
 # Choose how jobs run
 export DPL_RUNNER=docker                             # docker (default) | local
-export DPL_DOCKER_IMAGE=apache/spark:3.5.0-python3   # any Spark image you trust
+export DPL_DOCKER_IMAGE=apache/spark:3.5.0   # any Spark image you trust
 export DPL_SPARK_MASTER="local[*]"                   # use all cores
 
 # Master switch
@@ -277,7 +277,7 @@ or delete the plugin file. **Your DAGs were never modified**, so production beha
 | `DPL_ENABLED` | `--disabled` (inverts) | `true` | Master on/off |
 | `DPL_RUNNER` | `--runner` | `docker` | `docker` or `local` (host spark-submit) |
 | `DPL_CONTAINER_ENGINE` | `--container-engine` | `auto` | `auto` / `docker` / `podman` — which container CLI to use for the docker runner |
-| `DPL_DOCKER_IMAGE` | `--image` | `apache/spark:3.5.0-python3` | Spark image |
+| `DPL_DOCKER_IMAGE` | `--image` | `apache/spark:3.5.0` | Spark image |
 | `DPL_SPARK_MASTER` | `--spark-master` | `local[*]` | Spark master URL |
 | `DPL_JOBS_DIR` | `--jobs-dir` | `./jobs` | Primary host dir → `/jobs` |
 | `DPL_JOBS_PATH` | `--jobs-path` | — | Extra search roots for job files (comma list); jobs in the Airflow repo, subfolders, other repos, or JARs |
