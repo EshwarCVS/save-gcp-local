@@ -19,7 +19,7 @@ from typing import Dict, List, Optional
 from .config import Config
 from .resolver import JobResolver, build_default_roots
 
-log = logging.getLogger("dataproc_local.runner")
+log = logging.getLogger("save_gcp_local.runner")
 
 
 class SparkRunner:

@@ -169,8 +169,8 @@ Good for matching your real flow: boot Airflow, use the UI as normal.
 1. Drop a one-line file into your Airflow plugins folder:
 
 ```python
-# $AIRFLOW_HOME/plugins/dataproc_local_plugin.py
-from dataproc_local.airflow_plugin import *   # noqa
+# $AIRFLOW_HOME/plugins/save_gcp_local_plugin.py
+from save_gcp_local.airflow_plugin import *   # noqa
 ```
 
 2. Export the `DPL_*` vars (section 3).
@@ -224,7 +224,7 @@ If neither sample nor synthetic fits (e.g. you call an internal anonymization AP
 
 ```python
 # myteam_provider.py
-from dataproc_local.providers import register, DataProvider
+from save_gcp_local.providers import register, DataProvider
 
 @register
 class MyProvider(DataProvider):

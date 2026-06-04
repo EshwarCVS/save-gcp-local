@@ -17,7 +17,7 @@ import sys
 from .config import Config, load_config
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
-log = logging.getLogger("dataproc_local.cli")
+log = logging.getLogger("save_gcp_local.cli")
 
 
 def _apply_env_overrides(args) -> None:
