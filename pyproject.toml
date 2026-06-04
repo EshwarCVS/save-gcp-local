@@ -9,7 +9,7 @@ description = "Run Airflow DAGs locally and execute Dataproc/Spark jobs in local
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
-authors = [{ name = "dataproc-local contributors" }]
+authors = [{ name = "save-gcp-local contributors" }]
 keywords = ["airflow", "dataproc", "spark", "local", "docker", "testing", "gcp"]
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -37,6 +37,7 @@ dataproc-local = "dataproc_local.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/EshwarCVS/save-gcp-local"
+Repository = "https://github.com/EshwarCVS/save-gcp-local"
 Issues = "https://github.com/EshwarCVS/save-gcp-local/issues"
 
 [tool.setuptools.packages.find]

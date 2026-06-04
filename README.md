@@ -1,4 +1,4 @@
-# dataproc-local
+# save-gcp-local
 
 **Stop paying for Dataproc clusters just to test your Spark jobs.** Run them locally in Docker or Podman instead — same code, zero cloud cost, no DAG changes.
 
@@ -49,7 +49,7 @@ The cluster minutes add up fast, especially across a whole team iterating all da
 pip install "dataproc-local[all]"        # from PyPI (when published)
 # or from source:
 git clone https://github.com/EshwarCVS/save-gcp-local
-cd dataproc-local && pip install -e ".[all]"
+cd save-gcp-local && pip install -e ".[all]"
 ```
 
 ## 60-second start

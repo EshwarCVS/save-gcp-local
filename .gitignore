@@ -25,7 +25,7 @@ htmlcov/
 .mypy_cache/
 .ruff_cache/
 
-# dataproc-local generated dirs (default locations)
+# save-gcp-local generated dirs (default locations)
 /data/
 /output/
 /jobs/

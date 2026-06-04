@@ -5,7 +5,10 @@
 ## 1. Install
 
 ```bash
-pip install "dataproc-local[all]"     # or: pip install -e ".[all]" from source
+pip install "dataproc-local[all]"     # from PyPI (when published)
+# or from source:
+git clone https://github.com/EshwarCVS/save-gcp-local
+cd save-gcp-local && pip install -e ".[all]"
 ```
 
 ## 2. Point it at your stuff
