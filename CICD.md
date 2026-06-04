@@ -68,15 +68,15 @@ Rebuilds the MkDocs site and deploys to GitHub Pages whenever markdown files or 
 8. **Done** — PyPI package and GitHub Release are created automatically
 
 ```bash
-# Example: releasing v0.2.0
-git checkout -b release/0.2.0
+# Example: releasing v0.2.1
+git checkout -b release/0.2.1
 
-# Edit pyproject.toml: version = "0.2.0"
-# Edit CHANGELOG.md: add ## [0.2.0] section
+# Edit pyproject.toml: version = "0.2.1"
+# Edit CHANGELOG.md: add ## [0.2.1] section
 
 git add pyproject.toml CHANGELOG.md
-git commit -m "Bump version to 0.2.0"
-git push -u origin release/0.2.0
+git commit -m "Bump version to 0.2.1"
+git push -u origin release/0.2.1
 
 # Open PR, wait for CI, merge -> auto-deploys to PyPI
 ```

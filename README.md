@@ -38,10 +38,12 @@ The cluster minutes add up fast, especially across a whole team iterating all da
 
 - **Zero DAG edits** — works by patching Dataproc operators at runtime
 - **Generic** — any Dataproc operator, PySpark or Scala/Java JARs, any project layout
-- **Docker *or* Podman** (or a local `spark-submit`) — auto-detected
+- **Docker *or* Podman** (or a local `spark-submit`) — auto-detected, daemon health checked
 - **Jobs anywhere** — in the Airflow repo, a subfolder, a JAR, or a separate repo
 - **Test data your way** — none / real-data sample / synthetic / your own provider
-- **Two entry points** — a CLI and an auto-loading Airflow plugin
+- **Custom operator subclasses** — patch internal wrappers via `DPL_EXTRA_*_OPERATORS`
+- **Airflow 2.x and 3.x** — plugin for 2.x, early-patch `.pth` for 3.x
+- **Missing google provider** — installs mock stubs so DAGs still import and parse
 - **One switch to go back to GCP** — `DPL_ENABLED=false`
 
 ## Install
@@ -95,9 +97,11 @@ Cluster lifecycle operators become no-ops. Job-submit operators run your Spark c
 
 ## Supported operators
 
-Cluster lifecycle (no-op): `DataprocCreateClusterOperator`, `DataprocDeleteClusterOperator`, `DataprocUpdate/Start/StopClusterOperator`, workflow-template operators.
+Cluster lifecycle (no-op): `DataprocCreateClusterOperator`, `DataprocDeleteClusterOperator`, `DataprocUpdate/Start/StopClusterOperator`, workflow-template operators, `DataprocSubmitHiveJobOperator`.
 
 Job submission (runs locally): `DataprocSubmitJobOperator`, `DataprocCreateBatchOperator`, and legacy `DataprocSubmitPySparkJobOperator` / `SparkJobOperator` / `SparkSqlJobOperator` / `HadoopJobOperator`.
+
+Custom operator subclasses (e.g. internal wrappers that extend the base operators) can be patched via `DPL_EXTRA_NOOP_OPERATORS` and `DPL_EXTRA_SUBMIT_OPERATORS` — see SETUP.md §7.
 
 ## Limitations (be honest with your team)
 
