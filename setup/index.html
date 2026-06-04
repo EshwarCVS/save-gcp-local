@@ -520,6 +520,56 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="1. Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-for-the-docker-runner-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for the docker runner (default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-for-the-local-runner-dpl_runnerlocal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for the local runner (DPL_RUNNER=local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-for-jarscala-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for JAR/Scala jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airflow-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow version
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -635,10 +685,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#entry-point-2-the-airflow-plugin-auto-load" class="md-nav__link">
+  <a href="#entry-point-2-the-airflow-plugin-auto-load-airflow-2x" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entry point 2: the Airflow plugin (auto-load)
+        Entry point 2: the Airflow plugin (auto-load) — Airflow 2.x
       
     </span>
   </a>
@@ -651,15 +701,143 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-provide-test-data-your-choice-this-is-optional" class="md-nav__link">
+  <a href="#5-airflow-3x-early-patching" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Provide test data — your choice (this is optional)
+        5. Airflow 3.x — early patching
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="5. Provide test data — your choice (this is optional)">
+    <nav class="md-nav" aria-label="5. Airflow 3.x — early patching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#airflow-3x-import-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow 3.x import changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-jar-and-scalajava-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. JAR and Scala/Java jobs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. JAR and Scala/Java jobs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-built-jar-most-common" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-built JAR (most common)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-jars-main-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple JARs (main + dependencies)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-sparkjoboperator-airflow-2x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy SparkJobOperator (Airflow 2.x)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-docker-image-for-jar-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Docker image for JAR jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-custom-operator-subclasses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Custom operator subclasses
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Custom operator subclasses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fix-declare-extra-operators-via-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix: declare extra operators via config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fix-patch-subclasses-that-inherit-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix: patch subclasses that inherit automatically
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-provide-test-data-your-choice-this-is-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Provide test data — your choice (this is optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Provide test data — your choice (this is optional)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -690,10 +868,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-verify-its-actually-running-locally" class="md-nav__link">
+  <a href="#9-verify-its-actually-running-locally" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Verify it's actually running locally
+        9. Verify it's actually running locally
       
     </span>
   </a>
@@ -701,10 +879,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-turning-it-off-run-against-real-gcp-again" class="md-nav__link">
+  <a href="#10-turning-it-off-run-against-real-gcp-again" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Turning it off (run against real GCP again)
+        10. Turning it off (run against real GCP again)
       
     </span>
   </a>
@@ -712,10 +890,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-all-configuration-options" class="md-nav__link">
+  <a href="#11-all-configuration-options" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. All configuration options
+        11. All configuration options
       
     </span>
   </a>
@@ -723,21 +901,159 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-troubleshooting" class="md-nav__link">
+  <a href="#12-troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Troubleshooting
+        12. Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#patched-0-dataproc-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patched 0 Dataproc operators
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#10-quick-mental-model" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#exec-spark-submit-not-found-exit-127-inside-the-container" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. Quick mental model
+        exec: spark-submit: not found (exit 127) inside the container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-command-not-found-cannot-connect-to-the-docker-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docker: command not found / Cannot connect to the Docker daemon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#podman-detected-but-not-responding-stale-ssh-socket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Podman detected but not responding / stale SSH socket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classnotfoundexception-scalajava-jar-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ClassNotFoundException (Scala/Java JAR jobs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modulenotfounderror-no-module-named-airflowprovidersgoogle-in-dag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModuleNotFoundError: No module named 'airflow.providers.google' in DAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-operators-not-being-patched" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom operators not being patched
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hive-tasks-skipped-not-executed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hive tasks skipped / not executed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-runs-but-cant-find-its-input-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job runs but can't find its input file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#countssums-look-wrong-vs-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Counts/sums look wrong vs production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-reads-bigquerygcs-directly-in-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job reads BigQuery/GCS directly in code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrong-python-wrong-airflow-version-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrong Python / wrong Airflow version used
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-quick-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Quick mental model
       
     </span>
   </a>
@@ -879,6 +1195,56 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="1. Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-for-the-docker-runner-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for the docker runner (default)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-for-the-local-runner-dpl_runnerlocal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for the local runner (DPL_RUNNER=local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-for-jarscala-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for JAR/Scala jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airflow-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow version
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -994,10 +1360,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#entry-point-2-the-airflow-plugin-auto-load" class="md-nav__link">
+  <a href="#entry-point-2-the-airflow-plugin-auto-load-airflow-2x" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Entry point 2: the Airflow plugin (auto-load)
+        Entry point 2: the Airflow plugin (auto-load) — Airflow 2.x
       
     </span>
   </a>
@@ -1010,15 +1376,143 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-provide-test-data-your-choice-this-is-optional" class="md-nav__link">
+  <a href="#5-airflow-3x-early-patching" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Provide test data — your choice (this is optional)
+        5. Airflow 3.x — early patching
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="5. Provide test data — your choice (this is optional)">
+    <nav class="md-nav" aria-label="5. Airflow 3.x — early patching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#airflow-3x-import-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow 3.x import changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-jar-and-scalajava-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. JAR and Scala/Java jobs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. JAR and Scala/Java jobs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-built-jar-most-common" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-built JAR (most common)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-jars-main-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple JARs (main + dependencies)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-sparkjoboperator-airflow-2x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy SparkJobOperator (Airflow 2.x)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-docker-image-for-jar-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Docker image for JAR jobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-custom-operator-subclasses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Custom operator subclasses
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Custom operator subclasses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fix-declare-extra-operators-via-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix: declare extra operators via config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fix-patch-subclasses-that-inherit-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix: patch subclasses that inherit automatically
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-provide-test-data-your-choice-this-is-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Provide test data — your choice (this is optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Provide test data — your choice (this is optional)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1049,10 +1543,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-verify-its-actually-running-locally" class="md-nav__link">
+  <a href="#9-verify-its-actually-running-locally" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Verify it's actually running locally
+        9. Verify it's actually running locally
       
     </span>
   </a>
@@ -1060,10 +1554,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#7-turning-it-off-run-against-real-gcp-again" class="md-nav__link">
+  <a href="#10-turning-it-off-run-against-real-gcp-again" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. Turning it off (run against real GCP again)
+        10. Turning it off (run against real GCP again)
       
     </span>
   </a>
@@ -1071,10 +1565,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-all-configuration-options" class="md-nav__link">
+  <a href="#11-all-configuration-options" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. All configuration options
+        11. All configuration options
       
     </span>
   </a>
@@ -1082,21 +1576,159 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-troubleshooting" class="md-nav__link">
+  <a href="#12-troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Troubleshooting
+        12. Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#patched-0-dataproc-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patched 0 Dataproc operators
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#10-quick-mental-model" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#exec-spark-submit-not-found-exit-127-inside-the-container" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. Quick mental model
+        exec: spark-submit: not found (exit 127) inside the container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-command-not-found-cannot-connect-to-the-docker-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docker: command not found / Cannot connect to the Docker daemon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#podman-detected-but-not-responding-stale-ssh-socket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Podman detected but not responding / stale SSH socket
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classnotfoundexception-scalajava-jar-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ClassNotFoundException (Scala/Java JAR jobs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modulenotfounderror-no-module-named-airflowprovidersgoogle-in-dag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModuleNotFoundError: No module named 'airflow.providers.google' in DAG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-operators-not-being-patched" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom operators not being patched
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hive-tasks-skipped-not-executed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hive tasks skipped / not executed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-runs-but-cant-find-its-input-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job runs but can't find its input file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#countssums-look-wrong-vs-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Counts/sums look wrong vs production
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-reads-bigquerygcs-directly-in-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Job reads BigQuery/GCS directly in code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrong-python-wrong-airflow-version-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrong Python / wrong Airflow version used
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-quick-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Quick mental model
       
     </span>
   </a>
@@ -1142,30 +1774,104 @@
 <p><strong>The recommended workflow:</strong> iterate locally (seconds–minutes, $0) until logic is correct, then do ONE real GCP run at the end to confirm scale. That's where the 30–40 minutes per iteration is saved.</p>
 <hr />
 <h2 id="1-prerequisites">1. Prerequisites<a class="headerlink" href="#1-prerequisites" title="Permanent link">&para;</a></h2>
-<p>Depending on which runner you choose:</p>
+<h3 id="required-for-the-docker-runner-default">Required for the docker runner (default)<a class="headerlink" href="#required-for-the-docker-runner-default" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Runner</th>
-<th>Needs</th>
+<th>Requirement</th>
+<th>Minimum version</th>
+<th>How to check</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>docker</code> (default)</td>
-<td>Docker <strong>or</strong> Podman installed &amp; running (auto-detected; Podman is CLI-compatible)</td>
+<td>Docker <strong>or</strong> Podman</td>
+<td>Docker 20+ / Podman 4+</td>
+<td><code>docker info</code> or <code>podman info</code></td>
 </tr>
 <tr>
-<td><code>local</code></td>
-<td>A local Apache Spark install (<code>spark-submit</code> on PATH) + a JDK</td>
+<td>Java (JDK or JRE)</td>
+<td>11+ (Spark 3.x requires Java 11 or 17)</td>
+<td><code>java -version</code></td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.8+</td>
+<td><code>python --version</code></td>
 </tr>
 </tbody>
 </table>
-<p>Plus:
-- Python 3.8+
-- Your DAGs folder (from git or a Composer download)
-- Your Spark job files (the separate repo you already have locally)
-- <code>apache-airflow</code> + <code>apache-airflow-providers-google</code> if you use the Airflow integration (you likely already have your own pinned versions)</p>
+<blockquote>
+<p><strong>Container not starting?</strong> The library verifies the daemon responds before launching (<code>docker info</code> / <code>podman info</code>). If <code>DPL_CONTAINER_ENGINE=auto</code> picks the wrong engine, override it: <code>export DPL_CONTAINER_ENGINE=docker</code>.</p>
+</blockquote>
+<h3 id="required-for-the-local-runner-dpl_runnerlocal">Required for the local runner (<code>DPL_RUNNER=local</code>)<a class="headerlink" href="#required-for-the-local-runner-dpl_runnerlocal" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apache Spark</td>
+<td><code>spark-submit</code> must be on PATH, or set <code>DPL_SPARK_SUBMIT_CMD=/path/to/spark-submit</code></td>
+</tr>
+<tr>
+<td>Java 11+</td>
+<td>Same as above</td>
+</tr>
+</tbody>
+</table>
+<h3 id="required-for-jarscala-jobs">Required for JAR/Scala jobs<a class="headerlink" href="#required-for-jarscala-jobs" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pre-built JAR</td>
+<td>Your Scala/Java job must already be compiled. Build with <code>mvn package</code> or <code>sbt assembly</code> before running.</td>
+</tr>
+<tr>
+<td><code>DPL_JOBS_DIR</code> or <code>DPL_JOBS_PATH</code></td>
+<td>Point at the directory containing your compiled JAR.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>No Maven/Gradle at runtime.</strong> The library does not compile code — it runs <code>spark-submit</code> against an existing JAR. Build the JAR first.</p>
+</blockquote>
+<h3 id="airflow-version">Airflow version<a class="headerlink" href="#airflow-version" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Airflow version</th>
+<th>Support</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.5 – 2.10</td>
+<td>Full</td>
+<td>Plugin approach works; DAGs parsed after plugins load</td>
+</tr>
+<tr>
+<td>3.0 – 3.1</td>
+<td>Full (with setup)</td>
+<td>DAGs parsed before plugins; requires <code>install-airflow3</code> (see §5)</td>
+</tr>
+<tr>
+<td>&lt; 2.5</td>
+<td>Partial</td>
+<td><code>airflow.utils.dates.days_ago</code> available; older operator names may differ</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="2-install">2. Install<a class="headerlink" href="#2-install" title="Permanent link">&para;</a></h2>
 <p>Pick whichever fits your team.</p>
@@ -1181,9 +1887,9 @@
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[all]&quot;</span><span class="w">               </span><span class="c1"># editable: your edits take effect immediately</span>
 </code></pre></div>
 <h3 id="option-c-from-the-built-wheel-offline-internal-mirror">Option C — from the built wheel (offline / internal mirror)<a class="headerlink" href="#option-c-from-the-built-wheel-offline-internal-mirror" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>save_gcp_local-0.1.0-py3-none-any.whl
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>save_gcp_local-0.2.1-py3-none-any.whl
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># or with extras:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;save_gcp_local-0.1.0-py3-none-any.whl[all]&quot;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;save_gcp_local-0.2.1-py3-none-any.whl[all]&quot;</span>
 </code></pre></div>
 <p>Verify:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>save-gcp-local<span class="w"> </span>providers
@@ -1215,17 +1921,20 @@
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># Choose how jobs run</span>
 <a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_RUNNER</span><span class="o">=</span>docker<span class="w">                             </span><span class="c1"># docker (default) | local</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_DOCKER_IMAGE</span><span class="o">=</span>apache/spark:3.5.0-python3<span class="w">   </span><span class="c1"># any Spark image you trust</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_DOCKER_IMAGE</span><span class="o">=</span>apache/spark:3.5.0<span class="w">           </span><span class="c1"># any Spark image you trust</span>
 <a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_SPARK_MASTER</span><span class="o">=</span><span class="s2">&quot;local[*]&quot;</span><span class="w">                   </span><span class="c1"># use all cores</span>
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
 <a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># Master switch</span>
 <a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w">                              </span><span class="c1"># false = passthrough to real GCP</span>
 </code></pre></div>
-<p>Full list of options is in section 8.</p>
+<p>Full list of options is in section 9.</p>
 <hr />
 <h2 id="4-run-it-two-entry-points">4. Run it — two entry points<a class="headerlink" href="#4-run-it-two-entry-points" title="Permanent link">&para;</a></h2>
 <h3 id="entry-point-1-the-cli">Entry point 1: the CLI<a class="headerlink" href="#entry-point-1-the-cli" title="Permanent link">&para;</a></h3>
 <p>Good for quick, scripted, one-off runs.</p>
+<blockquote>
+<p><strong>Important:</strong> The CLI applies patches in the current Python process, then spawns Airflow as a subprocess using <code>sys.executable -m airflow</code>. Both processes use the same Python interpreter and installed packages. The Airflow plugin <strong>must be installed</strong> (the <code>save_gcp_local</code> package on <code>PYTHONPATH</code>) for patches to reach the Airflow subprocess — the CLI sets patches in memory, not the child process. For full in-process patching use the plugin approach (Entry point 2) or Airflow 3.x early patching (§5).</p>
+</blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Just apply the interception, then you start Airflow yourself:</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span>--jobs-dir<span class="w"> </span>./spark-repo<span class="w"> </span>--data-dir<span class="w"> </span>./data
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>airflow<span class="w"> </span>standalone<span class="w">        </span><span class="c1"># trigger tasks in the UI; Dataproc steps run locally</span>
@@ -1248,8 +1957,8 @@
 <a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="c1"># See exactly what spark-submit WOULD run, without running it:</span>
 <a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span>--dag<span class="w"> </span>my_pipeline<span class="w"> </span>--task<span class="w"> </span>spark_transform<span class="w"> </span>--dry-run
 </code></pre></div>
-<h3 id="entry-point-2-the-airflow-plugin-auto-load">Entry point 2: the Airflow plugin (auto-load)<a class="headerlink" href="#entry-point-2-the-airflow-plugin-auto-load" title="Permanent link">&para;</a></h3>
-<p>Good for matching your real flow: boot Airflow, use the UI as normal.</p>
+<h3 id="entry-point-2-the-airflow-plugin-auto-load-airflow-2x">Entry point 2: the Airflow plugin (auto-load) — Airflow 2.x<a class="headerlink" href="#entry-point-2-the-airflow-plugin-auto-load-airflow-2x" title="Permanent link">&para;</a></h3>
+<p>Good for matching your real flow: boot Airflow, use the UI as normal. Works fully in <strong>Airflow 2.x</strong> where plugins load before DAG parsing.</p>
 <ol>
 <li>Drop a one-line file into your Airflow plugins folder:</li>
 </ol>
@@ -1266,64 +1975,193 @@
 <ol>
 <li>Trigger tasks in the UI exactly as before. Variables and Connections resolve normally; only the cluster step is replaced.</li>
 </ol>
+<p>For Airflow 3.x, use the early-patch approach in §5 instead.</p>
 <hr />
-<h2 id="5-provide-test-data-your-choice-this-is-optional">5. Provide test data — your choice (this is optional)<a class="headerlink" href="#5-provide-test-data-your-choice-this-is-optional" title="Permanent link">&para;</a></h2>
-<p>If your jobs read local files you've already staged, skip this entirely (<code>--provider none</code>). Otherwise pick a strategy:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># (a) Do nothing — you stage /data yourself</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>none<span class="w"> </span>--input<span class="w"> </span>mydata.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv
+<h2 id="5-airflow-3x-early-patching">5. Airflow 3.x — early patching<a class="headerlink" href="#5-airflow-3x-early-patching" title="Permanent link">&para;</a></h2>
+<p>Airflow 3.x changed plugin loading order: <strong>DAGs are parsed before plugins load</strong>. This means the plugin-based approach registers patches too late — the DAG has already imported operator classes before patches are applied.</p>
+<p>The fix is a Python <code>.pth</code> file that runs patching code at interpreter startup, before any Airflow code:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># One-time setup: installs a .pth file in site-packages</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>save-gcp-local<span class="w"> </span>install-airflow3
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># (b) SAMPLE: a subset of REAL data, exact values preserved</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span>--input<span class="w"> </span>prod_export.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv<span class="w"> </span>--pct<span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># (c) SYNTHETIC: learn the shape of real data, generate MORE rows (no real values copied)</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>synthetic<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span>--input<span class="w"> </span>prod_export.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv<span class="w"> </span>--rows<span class="w"> </span><span class="m">500000</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="c1"># From a database table instead of a file:</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">  </span>--jdbc<span class="w"> </span>postgresql://user:pass@host:5432/db<span class="w"> </span>--table<span class="w"> </span>events<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">  </span>--pct<span class="w"> </span><span class="m">2</span><span class="w"> </span>--output<span class="w"> </span>./data/events.csv
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Then set this env var in your Airflow environment (Composer, K8s, airflow.cfg, etc.)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_PATCH_EARLY</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_DOCKER_IMAGE</span><span class="o">=</span>apache/spark:3.5.0
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># ... other DPL_* vars as needed</span>
+</code></pre></div>
+<p>The <code>.pth</code> file is a no-op unless <code>DPL_PATCH_EARLY=true</code> is set, so it is safe to install in a shared environment.</p>
+<p><strong>Verify it works:</strong> Restart the Airflow scheduler and look for this in logs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>[save-gcp-local] Patched N Dataproc operators: ...
+</code></pre></div>
+<p>If it still shows 0 operators patched, check:
+- <code>DPL_PATCH_EARLY=true</code> is visible to the scheduler process (not just the web server)
+- <code>save_gcp_local_early.pth</code> exists in your Python's site-packages (<code>python -c "import site; print(site.getsitepackages())"</code>)</p>
+<h3 id="airflow-3x-import-changes">Airflow 3.x import changes<a class="headerlink" href="#airflow-3x-import-changes" title="Permanent link">&para;</a></h3>
+<p>Airflow 3.x removed some commonly used imports. Update any DAG code that uses:</p>
+<table>
+<thead>
+<tr>
+<th>Old (Airflow 2.x)</th>
+<th>New (Airflow 3.x)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>from airflow.utils.dates import days_ago</code></td>
+<td><code>from datetime import datetime, timedelta</code></td>
+</tr>
+<tr>
+<td><code>from airflow.contrib.operators.*</code></td>
+<td><code>from airflow.providers.*</code></td>
+</tr>
+<tr>
+<td><code>from airflow.operators.python import PythonOperator</code></td>
+<td><code>from airflow.providers.standard.operators.python import PythonOperator</code></td>
+</tr>
+</tbody>
+</table>
+<p>These are user DAG changes, not library changes — <code>save-gcp-local</code> does not use any of the deprecated imports internally.</p>
+<hr />
+<h2 id="6-jar-and-scalajava-jobs">6. JAR and Scala/Java jobs<a class="headerlink" href="#6-jar-and-scalajava-jobs" title="Permanent link">&para;</a></h2>
+<p>The library fully supports Scala and Java jobs submitted as JARs. No special configuration is needed beyond pointing at the JAR file.</p>
+<h3 id="pre-built-jar-most-common">Pre-built JAR (most common)<a class="headerlink" href="#pre-built-jar-most-common" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># In your DAG — DataprocSubmitJobOperator with a spark_job spec</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">SUBMIT_JOB</span> <span class="o">=</span> <span class="n">DataprocSubmitJobOperator</span><span class="p">(</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">job</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>        <span class="s2">&quot;spark_job&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>            <span class="s2">&quot;main_class&quot;</span><span class="p">:</span> <span class="s2">&quot;com.example.TransformJob&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>            <span class="s2">&quot;jar_file_uris&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;gs://my-bucket/jars/etl-assembly-1.0.jar&quot;</span><span class="p">],</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;--date&quot;</span><span class="p">,</span> <span class="s2">&quot;{{ ds }}&quot;</span><span class="p">,</span> <span class="s2">&quot;--env&quot;</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">],</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>        <span class="p">}</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    <span class="p">},</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    <span class="o">...</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="p">)</span>
+</code></pre></div>
+<p>Locally, point the resolver at the compiled JAR:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_JOBS_PATH</span><span class="o">=</span><span class="s2">&quot;/path/to/scala-repo/target/scala-2.12&quot;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="c1"># The resolver finds etl-assembly-1.0.jar by basename, mounts its directory,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># and runs: spark-submit --class com.example.TransformJob /jobs/ext0/etl-assembly-1.0.jar ...</span>
+</code></pre></div>
+<h3 id="multiple-jars-main-dependencies">Multiple JARs (main + dependencies)<a class="headerlink" href="#multiple-jars-main-dependencies" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="s2">&quot;spark_job&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="s2">&quot;main_class&quot;</span><span class="p">:</span> <span class="s2">&quot;com.example.Main&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="s2">&quot;jar_file_uris&quot;</span><span class="p">:</span> <span class="p">[</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>        <span class="s2">&quot;gs://bucket/jars/main.jar&quot;</span><span class="p">,</span>         <span class="c1"># submitted first</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>        <span class="s2">&quot;gs://bucket/jars/dep-lib.jar&quot;</span><span class="p">,</span>      <span class="c1"># passed as --jars</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="p">],</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>The resolver handles each JAR independently. The first URI is the main JAR; the rest become <code>--jars</code>.</p>
+<h3 id="legacy-sparkjoboperator-airflow-2x">Legacy SparkJobOperator (Airflow 2.x)<a class="headerlink" href="#legacy-sparkjoboperator-airflow-2x" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">DataprocSubmitSparkJobOperator</span><span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;run_job&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="n">main_class</span><span class="o">=</span><span class="s2">&quot;com.example.Job&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">dataproc_jars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gs://bucket/jars/job.jar&quot;</span><span class="p">],</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="n">arguments</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;--date&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-06-01&quot;</span><span class="p">],</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="o">...</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="p">)</span>
+</code></pre></div>
+<p>Both modern (<code>DataprocSubmitJobOperator</code> with a dict) and legacy operators are supported.</p>
+<h3 id="recommended-docker-image-for-jar-jobs">Recommended Docker image for JAR jobs<a class="headerlink" href="#recommended-docker-image-for-jar-jobs" title="Permanent link">&para;</a></h3>
+<p>The official <code>apache/spark:3.5.0</code> image has <code>spark-submit</code> at <code>/opt/spark/bin/spark-submit</code>. The image's custom entrypoint does not add this directory to <code>PATH</code>. Either:</p>
+<p><strong>Option A — override the spark-submit path (simplest):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_SPARK_SUBMIT_CMD</span><span class="o">=</span>/opt/spark/bin/spark-submit
+</code></pre></div></p>
+<p><strong>Option B — use a custom image with PATH fixed (recommended for teams):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">FROM</span><span class="w"> </span><span class="s">apache/spark:3.5.0</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/opt/spark/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[]</span>
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>my-spark:3.5.0<span class="w"> </span>.
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_DOCKER_IMAGE</span><span class="o">=</span>my-spark:3.5.0
+</code></pre></div>
+<p><strong>Option C — override the container entrypoint:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_DOCKER_ENTRYPOINT</span><span class="o">=</span>/bin/bash
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_SPARK_SUBMIT_CMD</span><span class="o">=</span>/opt/spark/bin/spark-submit
+</code></pre></div></p>
+<hr />
+<h2 id="7-custom-operator-subclasses">7. Custom operator subclasses<a class="headerlink" href="#7-custom-operator-subclasses" title="Permanent link">&para;</a></h2>
+<p>Production DAGs often use internal wrappers around the base Dataproc operators. For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># bfdms/dpaas/operators.py (internal package)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">airflow.providers.google.cloud.operators.dataproc</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataprocSubmitJobOperator</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">BFDMSDataprocSubmitJobOperator</span><span class="p">(</span><span class="n">DataprocSubmitJobOperator</span><span class="p">):</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal wrapper that adds org-specific defaults.&quot;&quot;&quot;</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>    <span class="o">...</span>
+</code></pre></div>
+<p>The library only patches operators in the <code>airflow.providers.google.cloud.operators.dataproc</code> module by default. Subclasses in other packages are invisible to the standard patch.</p>
+<h3 id="fix-declare-extra-operators-via-config">Fix: declare extra operators via config<a class="headerlink" href="#fix-declare-extra-operators-via-config" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Comma-separated list of FQCNs (module.ClassName)</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_EXTRA_NOOP_OPERATORS</span><span class="o">=</span><span class="se">\</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span>bfdms.dpaas.operators.BFDMSDataprocCreateClusterOperator,<span class="se">\</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span>bfdms.dpaas.operators.BFDMSDataprocDeleteClusterOperator
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_EXTRA_SUBMIT_OPERATORS</span><span class="o">=</span><span class="se">\</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">  </span>bfdms.dpaas.operators.BFDMSDataprocSubmitJobOperator
+</code></pre></div>
+<p>The library will import each module, find the class, and patch its <code>execute()</code> method — exactly the same as the built-in operators.</p>
+<h3 id="fix-patch-subclasses-that-inherit-automatically">Fix: patch subclasses that inherit automatically<a class="headerlink" href="#fix-patch-subclasses-that-inherit-automatically" title="Permanent link">&para;</a></h3>
+<p>If your subclass does not override <code>execute()</code>, patching the parent class is sufficient — Python's MRO means the patched parent method is inherited. Declare the extra operators only if the subclass overrides <code>execute()</code> itself.</p>
+<hr />
+<h2 id="8-provide-test-data-your-choice-this-is-optional">8. Provide test data — your choice (this is optional)<a class="headerlink" href="#8-provide-test-data-your-choice-this-is-optional" title="Permanent link">&para;</a></h2>
+<p>If your jobs read local files you've already staged, skip this entirely (<code>--provider none</code>). Otherwise pick a strategy:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># (a) Do nothing — you stage /data yourself</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>none<span class="w"> </span>--input<span class="w"> </span>mydata.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># (b) SAMPLE: a subset of REAL data, exact values preserved</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">  </span>--input<span class="w"> </span>prod_export.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv<span class="w"> </span>--pct<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="c1"># (c) SYNTHETIC: learn the shape of real data, generate MORE rows (no real values copied)</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>synthetic<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="w">  </span>--input<span class="w"> </span>prod_export.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv<span class="w"> </span>--rows<span class="w"> </span><span class="m">500000</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="c1"># From a database table instead of a file:</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="w">  </span>--jdbc<span class="w"> </span>postgresql://user:pass@host:5432/db<span class="w"> </span>--table<span class="w"> </span>events<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="w">  </span>--pct<span class="w"> </span><span class="m">2</span><span class="w"> </span>--output<span class="w"> </span>./data/events.csv
 </code></pre></div>
 <h3 id="matching-cloud-paths">Matching cloud paths<a class="headerlink" href="#matching-cloud-paths" title="Permanent link">&para;</a></h3>
 <p>Jobs usually read <code>gs://bucket/events/2024-06-01.csv</code>. The runner rewrites that to <code>/data/events/2024-06-01.csv</code> inside the container. So write your test data to the matching subpath:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>--input<span class="w"> </span>prod.csv<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span>--output<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DPL_DATA_DIR</span><span class="s2">/events/2024-06-01.csv&quot;</span><span class="w"> </span>--pct<span class="w"> </span><span class="m">1</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span>--input<span class="w"> </span>prod.csv<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span>--output<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DPL_DATA_DIR</span><span class="s2">/events/2024-06-01.csv&quot;</span><span class="w"> </span>--pct<span class="w"> </span><span class="m">1</span>
 </code></pre></div>
 <h3 id="bring-your-own-provider">Bring your own provider<a class="headerlink" href="#bring-your-own-provider" title="Permanent link">&para;</a></h3>
 <p>If neither sample nor synthetic fits (e.g. you call an internal anonymization API):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># myteam_provider.py</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">save_gcp_local.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span><span class="p">,</span> <span class="n">DataProvider</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nd">@register</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyProvider</span><span class="p">(</span><span class="n">DataProvider</span><span class="p">):</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;myteam&quot;</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">materialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">):</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>        <span class="c1"># produce data at `dest`, then:</span>
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>        <span class="k">return</span> <span class="n">dest</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># myteam_provider.py</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">save_gcp_local.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span><span class="p">,</span> <span class="n">DataProvider</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="nd">@register</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyProvider</span><span class="p">(</span><span class="n">DataProvider</span><span class="p">):</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;myteam&quot;</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">materialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">):</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>        <span class="c1"># produce data at `dest`, then:</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>        <span class="k">return</span> <span class="n">dest</span>
 </code></pre></div>
 <p>Import it before running, then <code>--provider myteam</code>.</p>
 <hr />
-<h2 id="6-verify-its-actually-running-locally">6. Verify it's actually running locally<a class="headerlink" href="#6-verify-its-actually-running-locally" title="Permanent link">&para;</a></h2>
+<h2 id="9-verify-its-actually-running-locally">9. Verify it's actually running locally<a class="headerlink" href="#9-verify-its-actually-running-locally" title="Permanent link">&para;</a></h2>
 <p>Run a single Dataproc task and watch the logs:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span>--dag<span class="w"> </span>my_pipeline<span class="w"> </span>--task<span class="w"> </span>spark_transform<span class="w"> </span>--execution-date<span class="w"> </span><span class="m">2024</span>-06-01
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span>--dag<span class="w"> </span>my_pipeline<span class="w"> </span>--task<span class="w"> </span>spark_transform<span class="w"> </span>--execution-date<span class="w"> </span><span class="m">2024</span>-06-01
 </code></pre></div>
 <p>You should see:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>[save-gcp-local] CreateCluster on task &#39;create_cluster&#39; -&gt; SKIPPED (no GCP cluster, no cost).
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>[save-gcp-local] spark_transform (pyspark) -&gt; running locally (runner=docker)
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>[save-gcp-local] docker run --rm ... spark-submit --master local[*] /jobs/transform.py ...
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>[spark] ... your job output ...
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>[save-gcp-local] spark_transform completed.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>[save-gcp-local] CreateCluster on task &#39;create_cluster&#39; -&gt; SKIPPED (no GCP cluster, no cost).
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>[save-gcp-local] spark_transform (pyspark) -&gt; running locally (runner=docker)
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>[save-gcp-local] docker run --rm ... spark-submit --master local[*] /jobs/transform.py ...
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>[spark] ... your job output ...
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>[save-gcp-local] spark_transform completed.
 </code></pre></div>
-<p>If you see <code>Patched 0 operators</code>, jump to section 9.</p>
+<p>If you see <code>Patched 0 operators</code>, jump to section 11.</p>
 <hr />
-<h2 id="7-turning-it-off-run-against-real-gcp-again">7. Turning it off (run against real GCP again)<a class="headerlink" href="#7-turning-it-off-run-against-real-gcp-again" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_ENABLED</span><span class="o">=</span><span class="nb">false</span>
+<h2 id="10-turning-it-off-run-against-real-gcp-again">10. Turning it off (run against real GCP again)<a class="headerlink" href="#10-turning-it-off-run-against-real-gcp-again" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_ENABLED</span><span class="o">=</span><span class="nb">false</span>
 </code></pre></div>
 <p>or delete the plugin file. <strong>Your DAGs were never modified</strong>, so production behavior is identical to before the library existed.</p>
 <hr />
-<h2 id="8-all-configuration-options">8. All configuration options<a class="headerlink" href="#8-all-configuration-options" title="Permanent link">&para;</a></h2>
+<h2 id="11-all-configuration-options">11. All configuration options<a class="headerlink" href="#11-all-configuration-options" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1350,13 +2188,25 @@
 <td><code>DPL_CONTAINER_ENGINE</code></td>
 <td><code>--container-engine</code></td>
 <td><code>auto</code></td>
-<td><code>auto</code> / <code>docker</code> / <code>podman</code> — which container CLI to use for the docker runner</td>
+<td><code>auto</code> / <code>docker</code> / <code>podman</code> — which container CLI (auto checks daemon health)</td>
 </tr>
 <tr>
 <td><code>DPL_DOCKER_IMAGE</code></td>
 <td><code>--image</code></td>
-<td><code>apache/spark:3.5.0-python3</code></td>
-<td>Spark image</td>
+<td><code>apache/spark:3.5.0</code></td>
+<td>Spark container image</td>
+</tr>
+<tr>
+<td><code>DPL_DOCKER_ENTRYPOINT</code></td>
+<td>—</td>
+<td><em>(not set)</em></td>
+<td>Override the container entrypoint (e.g. <code>/bin/bash</code>)</td>
+</tr>
+<tr>
+<td><code>DPL_SPARK_SUBMIT_CMD</code></td>
+<td>—</td>
+<td><code>spark-submit</code></td>
+<td>Path to spark-submit inside the container (e.g. <code>/opt/spark/bin/spark-submit</code>)</td>
 </tr>
 <tr>
 <td><code>DPL_SPARK_MASTER</code></td>
@@ -1374,7 +2224,7 @@
 <td><code>DPL_JOBS_PATH</code></td>
 <td><code>--jobs-path</code></td>
 <td>—</td>
-<td>Extra search roots for job files (comma list); jobs in the Airflow repo, subfolders, other repos, or JARs</td>
+<td>Extra search roots for job files (comma list)</td>
 </tr>
 <tr>
 <td><code>DPL_DATA_DIR</code></td>
@@ -1424,32 +2274,82 @@
 <td><code>false</code></td>
 <td>Print spark-submit, don't execute</td>
 </tr>
+<tr>
+<td><code>DPL_EXTRA_NOOP_OPERATORS</code></td>
+<td>—</td>
+<td>—</td>
+<td>Comma-sep FQCNs of custom operators to no-op</td>
+</tr>
+<tr>
+<td><code>DPL_EXTRA_SUBMIT_OPERATORS</code></td>
+<td>—</td>
+<td>—</td>
+<td>Comma-sep FQCNs of custom operators to run locally</td>
+</tr>
+<tr>
+<td><code>DPL_PATCH_EARLY</code></td>
+<td>—</td>
+<td><code>false</code></td>
+<td>Set <code>true</code> for Airflow 3.x early patching via .pth</td>
+</tr>
 </tbody>
 </table>
 <p>CLI subcommands:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>save-gcp-local run         # apply patches + optionally run a DAG/task
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>save-gcp-local gen-data    # populate test data via a provider
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>save-gcp-local patch       # apply patches only (diagnostic)
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>save-gcp-local providers   # list available data providers
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>save-gcp-local run                # apply patches + optionally run a DAG/task
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>save-gcp-local gen-data           # populate test data via a provider
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>save-gcp-local patch              # apply patches only (diagnostic)
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>save-gcp-local providers          # list available data providers
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>save-gcp-local install-airflow3   # install early-patch .pth file for Airflow 3.x
 </code></pre></div>
 <hr />
-<h2 id="9-troubleshooting">9. Troubleshooting<a class="headerlink" href="#9-troubleshooting" title="Permanent link">&para;</a></h2>
-<p><strong><code>Patched 0 Dataproc operators</code></strong>
-- <code>apache-airflow-providers-google</code> not installed in the same environment.
-- <code>DPL_ENABLED=false</code>. Set it <code>true</code>.
-- Running outside Airflow with no provider present (expected for <code>--dry-run</code> smoke tests).</p>
-<p><strong><code>docker: command not found</code> / <code>Cannot connect to the Docker daemon</code></strong>
-- Docker not installed or not running. Either start Docker, or switch to <code>DPL_RUNNER=local</code> if you have a local Spark install.</p>
-<p><strong>Job runs but can't find its input file</strong>
-- The <code>gs://</code> path didn't map to a staged file. Check what path the job actually reads (often an Airflow Variable or <code>--input</code> arg), then stage data at the matching <code>/data/...</code> subpath (section 5).</p>
-<p><strong><code>ClassNotFoundException</code> (Scala)</strong>
-- <code>main_class</code> doesn't match the JAR, or the compiled JAR isn't in <code>DPL_JOBS_DIR</code>.</p>
-<p><strong>Counts/sums look wrong vs production</strong>
-- Expected. You're on sampled/synthetic data on a single machine. Validate logic, not absolute totals. Do a final full run on GCP.</p>
-<p><strong>Job reads BigQuery/GCS directly in code</strong>
-- The runner only rewrites paths it can see in the operator's job spec. If the path is hardcoded inside the job, parameterize it (take an input arg) so it can point at <code>/data</code> locally.</p>
+<h2 id="12-troubleshooting">12. Troubleshooting<a class="headerlink" href="#12-troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="patched-0-dataproc-operators"><code>Patched 0 Dataproc operators</code><a class="headerlink" href="#patched-0-dataproc-operators" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>apache-airflow-providers-google</code> not installed → library now installs mock stubs so DAGs can still import; check that <code>DPL_ENABLED</code> is not <code>false</code>.</li>
+<li>Running on Airflow 3.x without early patching → run <code>save-gcp-local install-airflow3</code> and set <code>DPL_PATCH_EARLY=true</code>.</li>
+<li><code>DPL_ENABLED=false</code> — set it to <code>true</code>.</li>
+</ul>
+<h3 id="exec-spark-submit-not-found-exit-127-inside-the-container"><code>exec: spark-submit: not found</code> (exit 127) inside the container<a class="headerlink" href="#exec-spark-submit-not-found-exit-127-inside-the-container" title="Permanent link">&para;</a></h3>
+<p>The official <code>apache/spark:3.5.0</code> image does not add <code>/opt/spark/bin</code> to PATH. Fix:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_SPARK_SUBMIT_CMD</span><span class="o">=</span>/opt/spark/bin/spark-submit
+</code></pre></div>
+<p>Or build a thin wrapper image:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">FROM</span><span class="w"> </span><span class="s">apache/spark:3.5.0</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="k">ENV</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/opt/spark/bin:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[]</span>
+</code></pre></div>
+<h3 id="docker-command-not-found-cannot-connect-to-the-docker-daemon"><code>docker: command not found</code> / <code>Cannot connect to the Docker daemon</code><a class="headerlink" href="#docker-command-not-found-cannot-connect-to-the-docker-daemon" title="Permanent link">&para;</a></h3>
+<p>Docker/Podman not installed or daemon not running. The library checks connectivity before launching (<code>docker info</code>). Either:</p>
+<ul>
+<li>Start Docker: <code>docker desktop start</code> or <code>sudo systemctl start docker</code></li>
+<li>Or for Podman: <code>podman machine start</code></li>
+<li>Or override to avoid auto-detection: <code>export DPL_CONTAINER_ENGINE=docker</code></li>
+<li>Or switch to local runner: <code>export DPL_RUNNER=local</code> (needs Spark installed locally)</li>
+</ul>
+<h3 id="podman-detected-but-not-responding-stale-ssh-socket"><code>Podman detected but not responding</code> / stale SSH socket<a class="headerlink" href="#podman-detected-but-not-responding-stale-ssh-socket" title="Permanent link">&para;</a></h3>
+<p>This happens after a VM crash. Run <code>podman machine stop &amp;&amp; podman machine start</code>, or set <code>DPL_CONTAINER_ENGINE=docker</code> to bypass auto-detection.</p>
+<h3 id="classnotfoundexception-scalajava-jar-jobs"><code>ClassNotFoundException</code> (Scala/Java JAR jobs)<a class="headerlink" href="#classnotfoundexception-scalajava-jar-jobs" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>main_class</code> string does not match the compiled class name — check with <code>jar tf your.jar | grep "\.class"</code>.</li>
+<li>The JAR is not in the search path — set <code>DPL_JOBS_PATH=/path/to/jars</code>.</li>
+<li>The JAR is not on the <code>DPL_DOCKER_IMAGE</code> image — mount it via <code>DPL_JOBS_DIR</code> or <code>DPL_JOBS_PATH</code>.</li>
+</ul>
+<h3 id="modulenotfounderror-no-module-named-airflowprovidersgoogle-in-dag"><code>ModuleNotFoundError: No module named 'airflow.providers.google'</code> in DAG<a class="headerlink" href="#modulenotfounderror-no-module-named-airflowprovidersgoogle-in-dag" title="Permanent link">&para;</a></h3>
+<p>The library installs mock stubs in <code>sys.modules</code> so this should not propagate past <code>apply_patches()</code>. If you still see it, <code>apply_patches()</code> was called too late (Airflow 3.x plugin timing issue). Use the early-patch approach (§5).</p>
+<h3 id="custom-operators-not-being-patched">Custom operators not being patched<a class="headerlink" href="#custom-operators-not-being-patched" title="Permanent link">&para;</a></h3>
+<p>Subclasses in other packages require <code>DPL_EXTRA_NOOP_OPERATORS</code> or <code>DPL_EXTRA_SUBMIT_OPERATORS</code>. See §7.</p>
+<h3 id="hive-tasks-skipped-not-executed">Hive tasks skipped / not executed<a class="headerlink" href="#hive-tasks-skipped-not-executed" title="Permanent link">&para;</a></h3>
+<p><code>DataprocSubmitHiveJobOperator</code> is patched as a no-op locally — HQL cannot run against the embedded Derby metastore. The skipped HQL is logged so you can inspect it. To actually validate HQL, run a separate Hive / Spark SQL session against the same data.</p>
+<h3 id="job-runs-but-cant-find-its-input-file">Job runs but can't find its input file<a class="headerlink" href="#job-runs-but-cant-find-its-input-file" title="Permanent link">&para;</a></h3>
+<p>The <code>gs://</code> path didn't map to a staged file. Check what path the job actually reads (often an Airflow Variable or <code>--input</code> arg), then stage data at the matching <code>/data/...</code> subpath (section 8).</p>
+<h3 id="countssums-look-wrong-vs-production">Counts/sums look wrong vs production<a class="headerlink" href="#countssums-look-wrong-vs-production" title="Permanent link">&para;</a></h3>
+<p>Expected. You're on sampled/synthetic data on a single machine. Validate logic, not absolute totals. Do a final full run on GCP.</p>
+<h3 id="job-reads-bigquerygcs-directly-in-code">Job reads BigQuery/GCS directly in code<a class="headerlink" href="#job-reads-bigquerygcs-directly-in-code" title="Permanent link">&para;</a></h3>
+<p>The runner only rewrites paths it can see in the operator's job spec. If the path is hardcoded inside the job, parameterize it (take an input arg) so it can point at <code>/data</code> locally.</p>
+<h3 id="wrong-python-wrong-airflow-version-used">Wrong Python / wrong Airflow version used<a class="headerlink" href="#wrong-python-wrong-airflow-version-used" title="Permanent link">&para;</a></h3>
+<p>The CLI uses <code>sys.executable -m airflow</code> to invoke Airflow, guaranteeing the same Python and installed packages. If you still see the wrong version, the installed <code>airflow</code> package in that venv may be different from what <code>which airflow</code> returns. Verify with <code>python -m airflow version</code>.</p>
 <hr />
-<h2 id="10-quick-mental-model">10. Quick mental model<a class="headerlink" href="#10-quick-mental-model" title="Permanent link">&para;</a></h2>
+<h2 id="13-quick-mental-model">13. Quick mental model<a class="headerlink" href="#13-quick-mental-model" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Dataproc</strong> = GCP's job launcher. Can't be local. The library no-ops it.</li>
 <li><strong>Your Spark job</strong> = plain Spark. Runs locally in Spark local mode. The library runs it.</li>

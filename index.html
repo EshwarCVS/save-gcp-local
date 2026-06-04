@@ -910,10 +910,12 @@
 <ul>
 <li><strong>Zero DAG edits</strong> — works by patching Dataproc operators at runtime</li>
 <li><strong>Generic</strong> — any Dataproc operator, PySpark or Scala/Java JARs, any project layout</li>
-<li><strong>Docker <em>or</em> Podman</strong> (or a local <code>spark-submit</code>) — auto-detected</li>
+<li><strong>Docker <em>or</em> Podman</strong> (or a local <code>spark-submit</code>) — auto-detected, daemon health checked</li>
 <li><strong>Jobs anywhere</strong> — in the Airflow repo, a subfolder, a JAR, or a separate repo</li>
 <li><strong>Test data your way</strong> — none / real-data sample / synthetic / your own provider</li>
-<li><strong>Two entry points</strong> — a CLI and an auto-loading Airflow plugin</li>
+<li><strong>Custom operator subclasses</strong> — patch internal wrappers via <code>DPL_EXTRA_*_OPERATORS</code></li>
+<li><strong>Airflow 2.x and 3.x</strong> — plugin for 2.x, early-patch <code>.pth</code> for 3.x</li>
+<li><strong>Missing google provider</strong> — installs mock stubs so DAGs still import and parse</li>
 <li><strong>One switch to go back to GCP</strong> — <code>DPL_ENABLED=false</code></li>
 </ul>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
@@ -955,8 +957,9 @@
 </code></pre></div>
 <p>Cluster lifecycle operators become no-ops. Job-submit operators run your Spark code in a local container with your job files and test data mounted in.</p>
 <h2 id="supported-operators">Supported operators<a class="headerlink" href="#supported-operators" title="Permanent link">&para;</a></h2>
-<p>Cluster lifecycle (no-op): <code>DataprocCreateClusterOperator</code>, <code>DataprocDeleteClusterOperator</code>, <code>DataprocUpdate/Start/StopClusterOperator</code>, workflow-template operators.</p>
+<p>Cluster lifecycle (no-op): <code>DataprocCreateClusterOperator</code>, <code>DataprocDeleteClusterOperator</code>, <code>DataprocUpdate/Start/StopClusterOperator</code>, workflow-template operators, <code>DataprocSubmitHiveJobOperator</code>.</p>
 <p>Job submission (runs locally): <code>DataprocSubmitJobOperator</code>, <code>DataprocCreateBatchOperator</code>, and legacy <code>DataprocSubmitPySparkJobOperator</code> / <code>SparkJobOperator</code> / <code>SparkSqlJobOperator</code> / <code>HadoopJobOperator</code>.</p>
+<p>Custom operator subclasses (e.g. internal wrappers that extend the base operators) can be patched via <code>DPL_EXTRA_NOOP_OPERATORS</code> and <code>DPL_EXTRA_SUBMIT_OPERATORS</code> — see SETUP.md §7.</p>
 <h2 id="limitations-be-honest-with-your-team">Limitations (be honest with your team)<a class="headerlink" href="#limitations-be-honest-with-your-team" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Local Spark is a <strong>single machine</strong> — validate <em>logic</em> locally, <em>scale</em> on GCP once.</li>
