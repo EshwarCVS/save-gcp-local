@@ -73,7 +73,9 @@ Prefer the UI? Drop a one-liner into `$AIRFLOW_HOME/plugins/` and boot Airflow n
 
 - **[QUICKSTART.md](QUICKSTART.md)** — 5-minute setup
 - **[SETUP.md](SETUP.md)** — full guide: install options, config, both entry points, test-data strategies, troubleshooting
+- **[CICD.md](CICD.md)** — CI/CD pipeline, release process, branch protection
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — dev setup, tests, how to add a data provider
+- **[Docs site](https://eshwarcvs.github.io/save-gcp-local)** — full documentation website
 
 ## How it works
 
