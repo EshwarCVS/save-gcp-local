@@ -1,0 +1,51 @@
+site_name: save-gcp-local
+site_url: https://eshwarcvs.github.io/save-gcp-local
+site_description: Run Dataproc/Spark jobs locally — same code, zero cloud cost, no DAG changes.
+repo_url: https://github.com/EshwarCVS/save-gcp-local
+repo_name: EshwarCVS/save-gcp-local
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Home: index.md
+  - Quick Start: quickstart.md
+  - Setup Guide: setup.md
+  - CI/CD Pipeline: cicd.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - tables
+  - toc:
+      permalink: true
