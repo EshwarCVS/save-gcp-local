@@ -9,5 +9,5 @@ from .config import Config, load_config
 from .runner import SparkRunner
 from .airflow_patch import apply_patches
 
-__version__ = "0.1.0"
+__version__ = "0.2.1"
 __all__ = ["Config", "load_config", "SparkRunner", "apply_patches", "__version__"]

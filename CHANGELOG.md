@@ -3,6 +3,18 @@
 All notable changes to this project are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.1] - 2026-06-05
+
+### Added
+- Fixed issues 
+- Docker image tag
+- CLI subprocess / wrong Python	Replaced call(["airflow", ...]) 
+- Missing google provider = silent failure	apply_patches() now installs mock stub classes in sys.modules when the google provider is absent, so DAGs can import operator classes without ModuleNotFoundError	airflow_patch.py
+- Custom operator subclasses invisible	Added DPL_EXTRA_NOOP_OPERATORS and DPL_EXTRA_SUBMIT_OPERATORS config vars (comma-sep FQCNs) — patches internal subclasses like bfdms.dpaas.BFDMSDataprocCreateClusterOperator	config.py, airflow_patch.py
+- Hive operator not supported	Added DataprocSubmitHiveJobOperator as a smart no-op that logs the skipped HQL	airflow_patch.py
+- Container engine auto-detect fragile
+- Documentation
+
 ## [0.2.0] - 2026-06-05
 
 ### Added

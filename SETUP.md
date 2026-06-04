@@ -33,18 +33,39 @@ This library skips the parts that can only exist on GCP (cluster lifecycle) and 
 
 ## 1. Prerequisites
 
-Depending on which runner you choose:
+### Required for the docker runner (default)
 
-| Runner | Needs |
-|--------|-------|
-| `docker` (default) | Docker **or** Podman installed & running (auto-detected; Podman is CLI-compatible) |
-| `local` | A local Apache Spark install (`spark-submit` on PATH) + a JDK |
+| Requirement | Minimum version | How to check |
+|-------------|-----------------|--------------|
+| Docker **or** Podman | Docker 20+ / Podman 4+ | `docker info` or `podman info` |
+| Java (JDK or JRE) | 11+ (Spark 3.x requires Java 11 or 17) | `java -version` |
+| Python | 3.8+ | `python --version` |
 
-Plus:
-- Python 3.8+
-- Your DAGs folder (from git or a Composer download)
-- Your Spark job files (the separate repo you already have locally)
-- `apache-airflow` + `apache-airflow-providers-google` if you use the Airflow integration (you likely already have your own pinned versions)
+> **Container not starting?** The library verifies the daemon responds before launching (`docker info` / `podman info`). If `DPL_CONTAINER_ENGINE=auto` picks the wrong engine, override it: `export DPL_CONTAINER_ENGINE=docker`.
+
+### Required for the local runner (`DPL_RUNNER=local`)
+
+| Requirement | Notes |
+|-------------|-------|
+| Apache Spark | `spark-submit` must be on PATH, or set `DPL_SPARK_SUBMIT_CMD=/path/to/spark-submit` |
+| Java 11+ | Same as above |
+
+### Required for JAR/Scala jobs
+
+| Requirement | Notes |
+|-------------|-------|
+| Pre-built JAR | Your Scala/Java job must already be compiled. Build with `mvn package` or `sbt assembly` before running. |
+| `DPL_JOBS_DIR` or `DPL_JOBS_PATH` | Point at the directory containing your compiled JAR. |
+
+> **No Maven/Gradle at runtime.** The library does not compile code — it runs `spark-submit` against an existing JAR. Build the JAR first.
+
+### Airflow version
+
+| Airflow version | Support | Notes |
+|-----------------|---------|-------|
+| 2.5 – 2.10 | Full | Plugin approach works; DAGs parsed after plugins load |
+| 3.0 – 3.1 | Full (with setup) | DAGs parsed before plugins; requires `install-airflow3` (see §5) |
+| < 2.5 | Partial | `airflow.utils.dates.days_ago` available; older operator names may differ |
 
 ---
 
@@ -72,9 +93,9 @@ pip install -e ".[all]"               # editable: your edits take effect immedia
 ### Option C — from the built wheel (offline / internal mirror)
 
 ```bash
-pip install save_gcp_local-0.1.0-py3-none-any.whl
+pip install save_gcp_local-0.2.1-py3-none-any.whl
 # or with extras:
-pip install "save_gcp_local-0.1.0-py3-none-any.whl[all]"
+pip install "save_gcp_local-0.2.1-py3-none-any.whl[all]"
 ```
 
 Verify:
@@ -112,7 +133,6 @@ The resolver tries each root, checking common subfolders (`jobs/`, `spark/`, `in
 
 ### The core variables
 
-
 ```bash
 # Required-ish: point at your job code and data
 export DPL_JOBS_DIR=/abs/path/to/your/spark-repo     # mounted to /jobs in the container
@@ -121,14 +141,14 @@ export DPL_OUTPUT_DIR=/abs/path/to/output            # mounted to /output
 
 # Choose how jobs run
 export DPL_RUNNER=docker                             # docker (default) | local
-export DPL_DOCKER_IMAGE=apache/spark:3.5.0-python3   # any Spark image you trust
+export DPL_DOCKER_IMAGE=apache/spark:3.5.0           # any Spark image you trust
 export DPL_SPARK_MASTER="local[*]"                   # use all cores
 
 # Master switch
 export DPL_ENABLED=true                              # false = passthrough to real GCP
 ```
 
-Full list of options is in section 8.
+Full list of options is in section 9.
 
 ---
 
@@ -137,6 +157,8 @@ Full list of options is in section 8.
 ### Entry point 1: the CLI
 
 Good for quick, scripted, one-off runs.
+
+> **Important:** The CLI applies patches in the current Python process, then spawns Airflow as a subprocess using `sys.executable -m airflow`. Both processes use the same Python interpreter and installed packages. The Airflow plugin **must be installed** (the `save_gcp_local` package on `PYTHONPATH`) for patches to reach the Airflow subprocess — the CLI sets patches in memory, not the child process. For full in-process patching use the plugin approach (Entry point 2) or Airflow 3.x early patching (§5).
 
 ```bash
 # Just apply the interception, then you start Airflow yourself:
@@ -162,9 +184,9 @@ save-gcp-local run \
 save-gcp-local run --dag my_pipeline --task spark_transform --dry-run
 ```
 
-### Entry point 2: the Airflow plugin (auto-load)
+### Entry point 2: the Airflow plugin (auto-load) — Airflow 2.x
 
-Good for matching your real flow: boot Airflow, use the UI as normal.
+Good for matching your real flow: boot Airflow, use the UI as normal. Works fully in **Airflow 2.x** where plugins load before DAG parsing.
 
 1. Drop a one-line file into your Airflow plugins folder:
 
@@ -184,9 +206,176 @@ On startup the logs show:
 
 4. Trigger tasks in the UI exactly as before. Variables and Connections resolve normally; only the cluster step is replaced.
 
+For Airflow 3.x, use the early-patch approach in §5 instead.
+
 ---
 
-## 5. Provide test data — your choice (this is optional)
+## 5. Airflow 3.x — early patching
+
+Airflow 3.x changed plugin loading order: **DAGs are parsed before plugins load**. This means the plugin-based approach registers patches too late — the DAG has already imported operator classes before patches are applied.
+
+The fix is a Python `.pth` file that runs patching code at interpreter startup, before any Airflow code:
+
+```bash
+# One-time setup: installs a .pth file in site-packages
+save-gcp-local install-airflow3
+
+# Then set this env var in your Airflow environment (Composer, K8s, airflow.cfg, etc.)
+export DPL_PATCH_EARLY=true
+export DPL_ENABLED=true
+export DPL_DOCKER_IMAGE=apache/spark:3.5.0
+# ... other DPL_* vars as needed
+```
+
+The `.pth` file is a no-op unless `DPL_PATCH_EARLY=true` is set, so it is safe to install in a shared environment.
+
+**Verify it works:** Restart the Airflow scheduler and look for this in logs:
+
+```
+[save-gcp-local] Patched N Dataproc operators: ...
+```
+
+If it still shows 0 operators patched, check:
+- `DPL_PATCH_EARLY=true` is visible to the scheduler process (not just the web server)
+- `save_gcp_local_early.pth` exists in your Python's site-packages (`python -c "import site; print(site.getsitepackages())"`)
+
+### Airflow 3.x import changes
+
+Airflow 3.x removed some commonly used imports. Update any DAG code that uses:
+
+| Old (Airflow 2.x) | New (Airflow 3.x) |
+|-------------------|-------------------|
+| `from airflow.utils.dates import days_ago` | `from datetime import datetime, timedelta` |
+| `from airflow.contrib.operators.*` | `from airflow.providers.*` |
+| `from airflow.operators.python import PythonOperator` | `from airflow.providers.standard.operators.python import PythonOperator` |
+
+These are user DAG changes, not library changes — `save-gcp-local` does not use any of the deprecated imports internally.
+
+---
+
+## 6. JAR and Scala/Java jobs
+
+The library fully supports Scala and Java jobs submitted as JARs. No special configuration is needed beyond pointing at the JAR file.
+
+### Pre-built JAR (most common)
+
+```python
+# In your DAG — DataprocSubmitJobOperator with a spark_job spec
+SUBMIT_JOB = DataprocSubmitJobOperator(
+    task_id="transform",
+    job={
+        "spark_job": {
+            "main_class": "com.example.TransformJob",
+            "jar_file_uris": ["gs://my-bucket/jars/etl-assembly-1.0.jar"],
+            "args": ["--date", "{{ ds }}", "--env", "prod"],
+        }
+    },
+    ...
+)
+```
+
+Locally, point the resolver at the compiled JAR:
+
+```bash
+export DPL_JOBS_PATH="/path/to/scala-repo/target/scala-2.12"
+# The resolver finds etl-assembly-1.0.jar by basename, mounts its directory,
+# and runs: spark-submit --class com.example.TransformJob /jobs/ext0/etl-assembly-1.0.jar ...
+```
+
+### Multiple JARs (main + dependencies)
+
+```python
+"spark_job": {
+    "main_class": "com.example.Main",
+    "jar_file_uris": [
+        "gs://bucket/jars/main.jar",         # submitted first
+        "gs://bucket/jars/dep-lib.jar",      # passed as --jars
+    ],
+    "args": [...],
+}
+```
+
+The resolver handles each JAR independently. The first URI is the main JAR; the rest become `--jars`.
+
+### Legacy SparkJobOperator (Airflow 2.x)
+
+```python
+DataprocSubmitSparkJobOperator(
+    task_id="run_job",
+    main_class="com.example.Job",
+    dataproc_jars=["gs://bucket/jars/job.jar"],
+    arguments=["--date", "2024-06-01"],
+    ...
+)
+```
+
+Both modern (`DataprocSubmitJobOperator` with a dict) and legacy operators are supported.
+
+### Recommended Docker image for JAR jobs
+
+The official `apache/spark:3.5.0` image has `spark-submit` at `/opt/spark/bin/spark-submit`. The image's custom entrypoint does not add this directory to `PATH`. Either:
+
+**Option A — override the spark-submit path (simplest):**
+```bash
+export DPL_SPARK_SUBMIT_CMD=/opt/spark/bin/spark-submit
+```
+
+**Option B — use a custom image with PATH fixed (recommended for teams):**
+```dockerfile
+FROM apache/spark:3.5.0
+ENV PATH="/opt/spark/bin:${PATH}"
+ENTRYPOINT []
+```
+
+```bash
+docker build -t my-spark:3.5.0 .
+export DPL_DOCKER_IMAGE=my-spark:3.5.0
+```
+
+**Option C — override the container entrypoint:**
+```bash
+export DPL_DOCKER_ENTRYPOINT=/bin/bash
+export DPL_SPARK_SUBMIT_CMD=/opt/spark/bin/spark-submit
+```
+
+---
+
+## 7. Custom operator subclasses
+
+Production DAGs often use internal wrappers around the base Dataproc operators. For example:
+
+```python
+# bfdms/dpaas/operators.py (internal package)
+from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitJobOperator
+
+class BFDMSDataprocSubmitJobOperator(DataprocSubmitJobOperator):
+    """Internal wrapper that adds org-specific defaults."""
+    ...
+```
+
+The library only patches operators in the `airflow.providers.google.cloud.operators.dataproc` module by default. Subclasses in other packages are invisible to the standard patch.
+
+### Fix: declare extra operators via config
+
+```bash
+# Comma-separated list of FQCNs (module.ClassName)
+export DPL_EXTRA_NOOP_OPERATORS=\
+  bfdms.dpaas.operators.BFDMSDataprocCreateClusterOperator,\
+  bfdms.dpaas.operators.BFDMSDataprocDeleteClusterOperator
+
+export DPL_EXTRA_SUBMIT_OPERATORS=\
+  bfdms.dpaas.operators.BFDMSDataprocSubmitJobOperator
+```
+
+The library will import each module, find the class, and patch its `execute()` method — exactly the same as the built-in operators.
+
+### Fix: patch subclasses that inherit automatically
+
+If your subclass does not override `execute()`, patching the parent class is sufficient — Python's MRO means the patched parent method is inherited. Declare the extra operators only if the subclass overrides `execute()` itself.
+
+---
+
+## 8. Provide test data — your choice (this is optional)
 
 If your jobs read local files you've already staged, skip this entirely (`--provider none`). Otherwise pick a strategy:
 
@@ -238,7 +427,7 @@ Import it before running, then `--provider myteam`.
 
 ---
 
-## 6. Verify it's actually running locally
+## 9. Verify it's actually running locally
 
 Run a single Dataproc task and watch the logs:
 
@@ -256,11 +445,11 @@ You should see:
 [save-gcp-local] spark_transform completed.
 ```
 
-If you see `Patched 0 operators`, jump to section 9.
+If you see `Patched 0 operators`, jump to section 11.
 
 ---
 
-## 7. Turning it off (run against real GCP again)
+## 10. Turning it off (run against real GCP again)
 
 ```bash
 export DPL_ENABLED=false
@@ -270,17 +459,19 @@ or delete the plugin file. **Your DAGs were never modified**, so production beha
 
 ---
 
-## 8. All configuration options
+## 11. All configuration options
 
 | Env var | CLI flag | Default | Meaning |
 |---------|----------|---------|---------|
 | `DPL_ENABLED` | `--disabled` (inverts) | `true` | Master on/off |
 | `DPL_RUNNER` | `--runner` | `docker` | `docker` or `local` (host spark-submit) |
-| `DPL_CONTAINER_ENGINE` | `--container-engine` | `auto` | `auto` / `docker` / `podman` — which container CLI to use for the docker runner |
-| `DPL_DOCKER_IMAGE` | `--image` | `apache/spark:3.5.0-python3` | Spark image |
+| `DPL_CONTAINER_ENGINE` | `--container-engine` | `auto` | `auto` / `docker` / `podman` — which container CLI (auto checks daemon health) |
+| `DPL_DOCKER_IMAGE` | `--image` | `apache/spark:3.5.0` | Spark container image |
+| `DPL_DOCKER_ENTRYPOINT` | — | *(not set)* | Override the container entrypoint (e.g. `/bin/bash`) |
+| `DPL_SPARK_SUBMIT_CMD` | — | `spark-submit` | Path to spark-submit inside the container (e.g. `/opt/spark/bin/spark-submit`) |
 | `DPL_SPARK_MASTER` | `--spark-master` | `local[*]` | Spark master URL |
 | `DPL_JOBS_DIR` | `--jobs-dir` | `./jobs` | Primary host dir → `/jobs` |
-| `DPL_JOBS_PATH` | `--jobs-path` | — | Extra search roots for job files (comma list); jobs in the Airflow repo, subfolders, other repos, or JARs |
+| `DPL_JOBS_PATH` | `--jobs-path` | — | Extra search roots for job files (comma list) |
 | `DPL_DATA_DIR` | `--data-dir` | `./data` | Host dir → `/data` |
 | `DPL_OUTPUT_DIR` | `--output-dir` | `./output` | Host dir → `/output` |
 | `DPL_EXTRA_PACKAGES` | — | — | `--packages` (comma list) |
@@ -289,43 +480,96 @@ or delete the plugin file. **Your DAGs were never modified**, so production beha
 | `DPL_DOCKER_NETWORK` | — | `bridge` | Docker network |
 | `DPL_DOCKER_MEMORY` | — | — | e.g. `8g` |
 | `DPL_DRY_RUN` | `--dry-run` | `false` | Print spark-submit, don't execute |
+| `DPL_EXTRA_NOOP_OPERATORS` | — | — | Comma-sep FQCNs of custom operators to no-op |
+| `DPL_EXTRA_SUBMIT_OPERATORS` | — | — | Comma-sep FQCNs of custom operators to run locally |
+| `DPL_PATCH_EARLY` | — | `false` | Set `true` for Airflow 3.x early patching via .pth |
 
 CLI subcommands:
 
 ```
-save-gcp-local run         # apply patches + optionally run a DAG/task
-save-gcp-local gen-data    # populate test data via a provider
-save-gcp-local patch       # apply patches only (diagnostic)
-save-gcp-local providers   # list available data providers
+save-gcp-local run                # apply patches + optionally run a DAG/task
+save-gcp-local gen-data           # populate test data via a provider
+save-gcp-local patch              # apply patches only (diagnostic)
+save-gcp-local providers          # list available data providers
+save-gcp-local install-airflow3   # install early-patch .pth file for Airflow 3.x
 ```
 
 ---
 
-## 9. Troubleshooting
+## 12. Troubleshooting
 
-**`Patched 0 Dataproc operators`**
-- `apache-airflow-providers-google` not installed in the same environment.
-- `DPL_ENABLED=false`. Set it `true`.
-- Running outside Airflow with no provider present (expected for `--dry-run` smoke tests).
+### `Patched 0 Dataproc operators`
 
-**`docker: command not found` / `Cannot connect to the Docker daemon`**
-- Docker not installed or not running. Either start Docker, or switch to `DPL_RUNNER=local` if you have a local Spark install.
+- `apache-airflow-providers-google` not installed → library now installs mock stubs so DAGs can still import; check that `DPL_ENABLED` is not `false`.
+- Running on Airflow 3.x without early patching → run `save-gcp-local install-airflow3` and set `DPL_PATCH_EARLY=true`.
+- `DPL_ENABLED=false` — set it to `true`.
 
-**Job runs but can't find its input file**
-- The `gs://` path didn't map to a staged file. Check what path the job actually reads (often an Airflow Variable or `--input` arg), then stage data at the matching `/data/...` subpath (section 5).
+### `exec: spark-submit: not found` (exit 127) inside the container
 
-**`ClassNotFoundException` (Scala)**
-- `main_class` doesn't match the JAR, or the compiled JAR isn't in `DPL_JOBS_DIR`.
+The official `apache/spark:3.5.0` image does not add `/opt/spark/bin` to PATH. Fix:
 
-**Counts/sums look wrong vs production**
-- Expected. You're on sampled/synthetic data on a single machine. Validate logic, not absolute totals. Do a final full run on GCP.
+```bash
+export DPL_SPARK_SUBMIT_CMD=/opt/spark/bin/spark-submit
+```
 
-**Job reads BigQuery/GCS directly in code**
-- The runner only rewrites paths it can see in the operator's job spec. If the path is hardcoded inside the job, parameterize it (take an input arg) so it can point at `/data` locally.
+Or build a thin wrapper image:
+
+```dockerfile
+FROM apache/spark:3.5.0
+ENV PATH="/opt/spark/bin:${PATH}"
+ENTRYPOINT []
+```
+
+### `docker: command not found` / `Cannot connect to the Docker daemon`
+
+Docker/Podman not installed or daemon not running. The library checks connectivity before launching (`docker info`). Either:
+
+- Start Docker: `docker desktop start` or `sudo systemctl start docker`
+- Or for Podman: `podman machine start`
+- Or override to avoid auto-detection: `export DPL_CONTAINER_ENGINE=docker`
+- Or switch to local runner: `export DPL_RUNNER=local` (needs Spark installed locally)
+
+### `Podman detected but not responding` / stale SSH socket
+
+This happens after a VM crash. Run `podman machine stop && podman machine start`, or set `DPL_CONTAINER_ENGINE=docker` to bypass auto-detection.
+
+### `ClassNotFoundException` (Scala/Java JAR jobs)
+
+- `main_class` string does not match the compiled class name — check with `jar tf your.jar | grep "\.class"`.
+- The JAR is not in the search path — set `DPL_JOBS_PATH=/path/to/jars`.
+- The JAR is not on the `DPL_DOCKER_IMAGE` image — mount it via `DPL_JOBS_DIR` or `DPL_JOBS_PATH`.
+
+### `ModuleNotFoundError: No module named 'airflow.providers.google'` in DAG
+
+The library installs mock stubs in `sys.modules` so this should not propagate past `apply_patches()`. If you still see it, `apply_patches()` was called too late (Airflow 3.x plugin timing issue). Use the early-patch approach (§5).
+
+### Custom operators not being patched
+
+Subclasses in other packages require `DPL_EXTRA_NOOP_OPERATORS` or `DPL_EXTRA_SUBMIT_OPERATORS`. See §7.
+
+### Hive tasks skipped / not executed
+
+`DataprocSubmitHiveJobOperator` is patched as a no-op locally — HQL cannot run against the embedded Derby metastore. The skipped HQL is logged so you can inspect it. To actually validate HQL, run a separate Hive / Spark SQL session against the same data.
+
+### Job runs but can't find its input file
+
+The `gs://` path didn't map to a staged file. Check what path the job actually reads (often an Airflow Variable or `--input` arg), then stage data at the matching `/data/...` subpath (section 8).
+
+### Counts/sums look wrong vs production
+
+Expected. You're on sampled/synthetic data on a single machine. Validate logic, not absolute totals. Do a final full run on GCP.
+
+### Job reads BigQuery/GCS directly in code
+
+The runner only rewrites paths it can see in the operator's job spec. If the path is hardcoded inside the job, parameterize it (take an input arg) so it can point at `/data` locally.
+
+### Wrong Python / wrong Airflow version used
+
+The CLI uses `sys.executable -m airflow` to invoke Airflow, guaranteeing the same Python and installed packages. If you still see the wrong version, the installed `airflow` package in that venv may be different from what `which airflow` returns. Verify with `python -m airflow version`.
 
 ---
 
-## 10. Quick mental model
+## 13. Quick mental model
 
 - **Dataproc** = GCP's job launcher. Can't be local. The library no-ops it.
 - **Your Spark job** = plain Spark. Runs locally in Spark local mode. The library runs it.
