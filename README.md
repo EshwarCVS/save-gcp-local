@@ -3,6 +3,7 @@
 **Stop paying for Dataproc clusters just to test your Spark jobs.** Run them locally in Docker or Podman instead — same code, zero cloud cost, no DAG changes.
 
 [![CI](https://github.com/EshwarCVS/save-gcp-local/actions/workflows/ci.yml/badge.svg)](https://github.com/EshwarCVS/save-gcp-local/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/dataproc-local)](https://pypi.org/project/dataproc-local/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org)
 
