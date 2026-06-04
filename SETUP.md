@@ -1,4 +1,4 @@
-# dataproc-local — Developer Setup & Usage Guide
+# save-gcp-local — Developer Setup & Usage Guide
 
 A practical, step-by-step guide for installing the library and running your Dataproc/Spark jobs locally, adapted to your own setup.
 
@@ -65,7 +65,7 @@ pip install "dataproc-local[all]"     # everything
 
 ```bash
 git clone https://github.com/EshwarCVS/save-gcp-local
-cd dataproc-local
+cd save-gcp-local
 pip install -e ".[all]"               # editable: your edits take effect immediately
 ```
 

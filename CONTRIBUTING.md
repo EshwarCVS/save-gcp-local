@@ -1,4 +1,4 @@
-# Contributing to dataproc-local
+# Contributing to save-gcp-local
 
 Thanks for helping make local Dataproc testing cheaper for everyone. This guide gets you from clone to passing tests in a couple of minutes.
 
@@ -6,7 +6,7 @@ Thanks for helping make local Dataproc testing cheaper for everyone. This guide 
 
 ```bash
 git clone https://github.com/EshwarCVS/save-gcp-local
-cd dataproc-local
+cd save-gcp-local
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[all,dev]"
 ```
