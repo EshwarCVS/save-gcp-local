@@ -3,7 +3,7 @@
 All notable changes to this project are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-06-04
 
 ### Added
 - Intercept GCP Dataproc operators in local Airflow; run Spark jobs locally instead of creating a cluster.
