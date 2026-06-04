@@ -3,7 +3,7 @@
 **Stop paying for Dataproc clusters just to test your Spark jobs.** Run them locally in Docker or Podman instead — same code, zero cloud cost, no DAG changes.
 
 [![CI](https://github.com/EshwarCVS/save-gcp-local/actions/workflows/ci.yml/badge.svg)](https://github.com/EshwarCVS/save-gcp-local/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/dataproc-local)](https://pypi.org/project/dataproc-local/)
+[![PyPI](https://img.shields.io/pypi/v/save-gcp-local)](https://pypi.org/project/save-gcp-local/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org)
 
@@ -21,7 +21,7 @@ Testing Spark jobs on GCP Dataproc is **slow and expensive**. Every small code c
 
 The cluster minutes add up fast, especially across a whole team iterating all day.
 
-**dataproc-local removes the cluster entirely.** It intercepts the Dataproc steps in your local Airflow and runs the *same* Spark job in a local container. You iterate in seconds for free, then do **one** real Dataproc run at the end to confirm scale.
+**save-gcp-local removes the cluster entirely.** It intercepts the Dataproc steps in your local Airflow and runs the *same* Spark job in a local container. You iterate in seconds for free, then do **one** real Dataproc run at the end to confirm scale.
 
 > **Can you run Dataproc itself locally?** No — Dataproc is GCP infrastructure. But your *job* is plain Apache Spark, which has a built-in local mode. This tool no-ops the cluster steps and runs your job locally. That is the whole trick, and it is enough to save the money.
 
@@ -47,7 +47,7 @@ The cluster minutes add up fast, especially across a whole team iterating all da
 ## Install
 
 ```bash
-pip install "dataproc-local[all]"        # from PyPI (when published)
+pip install "save-gcp-local[all]"        # from PyPI (when published)
 # or from source:
 git clone https://github.com/EshwarCVS/save-gcp-local
 cd save-gcp-local && pip install -e ".[all]"
@@ -60,11 +60,11 @@ cd save-gcp-local && pip install -e ".[all]"
 export DPL_DATA_DIR=./data
 
 # 2. (optional) make test data — pick ONE
-dataproc-local gen-data --provider sample    --input prod.csv --output ./data/events.csv --pct 1
-dataproc-local gen-data --provider synthetic --input prod.csv --output ./data/events.csv --rows 200000
+save-gcp-local gen-data --provider sample    --input prod.csv --output ./data/events.csv --pct 1
+save-gcp-local gen-data --provider synthetic --input prod.csv --output ./data/events.csv --rows 200000
 
 # 3. run your DAG locally — Dataproc steps run in a container
-dataproc-local run --dags ./dags --dag my_pipeline --execution-date 2024-06-01
+save-gcp-local run --dags ./dags --dag my_pipeline --execution-date 2024-06-01
 ```
 
 Prefer the UI? Drop a one-liner into `$AIRFLOW_HOME/plugins/` and boot Airflow normally — see **[QUICKSTART.md](QUICKSTART.md)**.
