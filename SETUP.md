@@ -93,9 +93,9 @@ pip install -e ".[all]"               # editable: your edits take effect immedia
 ### Option C — from the built wheel (offline / internal mirror)
 
 ```bash
-pip install save_gcp_local-0.2.0-py3-none-any.whl
+pip install save_gcp_local-0.2.1-py3-none-any.whl
 # or with extras:
-pip install "save_gcp_local-0.2.0-py3-none-any.whl[all]"
+pip install "save_gcp_local-0.2.1-py3-none-any.whl[all]"
 ```
 
 Verify:
