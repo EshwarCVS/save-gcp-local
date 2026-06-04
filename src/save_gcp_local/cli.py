@@ -114,6 +114,42 @@ def cmd_providers(args) -> int:
     return 0
 
 
+# --------------------------------------------------------- install-airflow3
+def cmd_install_airflow3(args) -> int:
+    """Install a .pth file so Airflow 3.x applies patches before DAG parsing.
+
+    Airflow 3.x parses DAGs BEFORE loading plugins, so the plugin approach
+    registers patches too late.  This command drops a .pth file into your
+    Python environment's site-packages.  Python processes it at startup,
+    running save_gcp_local._early_patch before any Airflow code loads.
+
+    After running this, set DPL_PATCH_EARLY=true in your Airflow environment
+    (Airflow env vars, Kubernetes env, or Composer environment variable) to
+    activate early patching.  The .pth file is a no-op unless that var is set,
+    so it is safe to install globally in a shared environment.
+    """
+    import site
+    candidates = getattr(site, "getsitepackages", lambda: [])()
+    if not candidates:
+        # Fallback for virtualenvs that only have getusersitepackages
+        candidates = [site.getusersitepackages()]
+    target_dir = candidates[0]
+
+    import os
+    pth_path = os.path.join(target_dir, "save_gcp_local_early.pth")
+    with open(pth_path, "w") as f:
+        f.write("import save_gcp_local._early_patch\n")
+
+    log.info("Installed: %s", pth_path)
+    log.info(
+        "Next: set DPL_PATCH_EARLY=true in your Airflow environment "
+        "(Composer env var / K8s env / airflow.cfg [core] env_var_prefix) "
+        "so patching activates before DAG parsing."
+    )
+    log.info("Verify: restart the Airflow scheduler and look for '[save-gcp-local] Patched' in logs.")
+    return 0
+
+
 # -------------------------------------------------------------------- parse
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
@@ -166,6 +202,16 @@ def build_parser() -> argparse.ArgumentParser:
     # providers
     pr = sub.add_parser("providers", help="List data providers.")
     pr.set_defaults(func=cmd_providers)
+
+    # install-airflow3
+    ia = sub.add_parser(
+        "install-airflow3",
+        help=(
+            "Install early-patch .pth file for Airflow 3.x. "
+            "Airflow 3.x parses DAGs before loading plugins; this fixes that."
+        ),
+    )
+    ia.set_defaults(func=cmd_install_airflow3)
 
     return p
 
