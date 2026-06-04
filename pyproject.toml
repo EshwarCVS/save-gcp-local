@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "save-gcp-local"
-version = "0.1.0"
+version = "0.2.0"
 description = "Run Airflow DAGs locally and execute Dataproc/Spark jobs in local Docker instead of creating GCP clusters. Generic, zero DAG edits, pluggable test-data providers."
 readme = "README.md"
 requires-python = ">=3.8"
