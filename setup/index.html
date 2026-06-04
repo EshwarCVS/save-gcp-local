@@ -1,0 +1,1521 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Run Dataproc/Spark jobs locally — same code, zero cloud cost, no DAG changes.">
+      
+      
+      
+        <link rel="canonical" href="https://eshwarcvs.github.io/save-gcp-local/setup/">
+      
+      
+        <link rel="prev" href="../quickstart/">
+      
+      
+        <link rel="next" href="../cicd/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Setup Guide - save-gcp-local</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#save-gcp-local-developer-setup-usage-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="save-gcp-local" class="md-header__button md-logo" aria-label="save-gcp-local" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            save-gcp-local
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Setup Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EshwarCVS/save-gcp-local" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EshwarCVS/save-gcp-local
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quick Start
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Setup Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../cicd/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  CI/CD Pipeline
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contributing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../changelog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="save-gcp-local" class="md-nav__button md-logo" aria-label="save-gcp-local" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    save-gcp-local
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EshwarCVS/save-gcp-local" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EshwarCVS/save-gcp-local
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-first-can-you-actually-run-dataproc-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. First: can you actually run Dataproc locally?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Install
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Install">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-from-pypi-once-published" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — from PyPI (once published)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-from-source-clone-editable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — from source (clone + editable)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-from-the-built-wheel-offline-internal-mirror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C — from the built wheel (offline / internal mirror)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tell-the-library-where-your-things-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Tell the library where YOUR things live
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Tell the library where YOUR things live">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-do-the-spark-job-files-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where do the Spark job files live?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-core-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The core variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-run-it-two-entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Run it — two entry points
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Run it — two entry points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entry-point-1-the-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry point 1: the CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entry-point-2-the-airflow-plugin-auto-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry point 2: the Airflow plugin (auto-load)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-provide-test-data-your-choice-this-is-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Provide test data — your choice (this is optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Provide test data — your choice (this is optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matching-cloud-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matching cloud paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bring-your-own-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bring your own provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-verify-its-actually-running-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Verify it's actually running locally
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-turning-it-off-run-against-real-gcp-again" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Turning it off (run against real GCP again)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-all-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. All configuration options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-quick-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Quick mental model
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI/CD Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-first-can-you-actually-run-dataproc-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. First: can you actually run Dataproc locally?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Install
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Install">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-from-pypi-once-published" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — from PyPI (once published)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-from-source-clone-editable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — from source (clone + editable)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-from-the-built-wheel-offline-internal-mirror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C — from the built wheel (offline / internal mirror)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tell-the-library-where-your-things-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Tell the library where YOUR things live
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Tell the library where YOUR things live">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-do-the-spark-job-files-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where do the Spark job files live?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-core-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The core variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-run-it-two-entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Run it — two entry points
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Run it — two entry points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entry-point-1-the-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry point 1: the CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entry-point-2-the-airflow-plugin-auto-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry point 2: the Airflow plugin (auto-load)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-provide-test-data-your-choice-this-is-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Provide test data — your choice (this is optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Provide test data — your choice (this is optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matching-cloud-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matching cloud paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bring-your-own-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bring your own provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-verify-its-actually-running-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Verify it's actually running locally
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-turning-it-off-run-against-real-gcp-again" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Turning it off (run against real GCP again)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-all-configuration-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. All configuration options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-quick-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Quick mental model
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="save-gcp-local-developer-setup-usage-guide">save-gcp-local — Developer Setup &amp; Usage Guide<a class="headerlink" href="#save-gcp-local-developer-setup-usage-guide" title="Permanent link">&para;</a></h1>
+<p>A practical, step-by-step guide for installing the library and running your Dataproc/Spark jobs locally, adapted to your own setup.</p>
+<hr />
+<h2 id="0-first-can-you-actually-run-dataproc-locally">0. First: can you actually run Dataproc locally?<a class="headerlink" href="#0-first-can-you-actually-run-dataproc-locally" title="Permanent link">&para;</a></h2>
+<p>Read this before anything else — it removes the confusion.</p>
+<p><strong>You cannot download or run "Dataproc" on your laptop.</strong> Dataproc is Google's managed infrastructure: it provisions VMs, runs <code>spark-submit</code> on them, and tears them down. There is no local Dataproc.</p>
+<p><strong>But you don't need to.</strong> Your job is plain <strong>Apache Spark</strong> (PySpark or Scala). Dataproc is just the thing that <em>launches</em> it. Spark has a built-in <strong>local mode</strong> (<code>--master local[*]</code>) that runs the entire job in a single JVM on your machine — and code that runs in local mode is the same code that runs on a cluster.</p>
+<p>So the model is:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>On GCP:    [Dataproc creates cluster] -&gt; [spark-submit your job] -&gt; [delete cluster]
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Locally:   [skip — can&#39;t run Dataproc] -&gt; [spark-submit your job] -&gt; [skip]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                                              ^^^^^^^^^^^^^^^^^^^
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                                              this is identical
+</code></pre></div>
+<p>This library skips the parts that can only exist on GCP (cluster lifecycle) and runs the part that matters (your Spark job) locally in Docker or via a local <code>spark-submit</code>.</p>
+<p><strong>What you CAN validate locally:</strong> transformation logic, schema, SQL, UDFs, joins, filters, business rules, code bugs, dependency issues.</p>
+<p><strong>What you CANNOT fully validate locally:</strong> exact row counts at production scale, behavior of very large shuffles, partition skew, cluster-sizing issues. Local is one machine.</p>
+<p><strong>The recommended workflow:</strong> iterate locally (seconds–minutes, $0) until logic is correct, then do ONE real GCP run at the end to confirm scale. That's where the 30–40 minutes per iteration is saved.</p>
+<hr />
+<h2 id="1-prerequisites">1. Prerequisites<a class="headerlink" href="#1-prerequisites" title="Permanent link">&para;</a></h2>
+<p>Depending on which runner you choose:</p>
+<table>
+<thead>
+<tr>
+<th>Runner</th>
+<th>Needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker</code> (default)</td>
+<td>Docker <strong>or</strong> Podman installed &amp; running (auto-detected; Podman is CLI-compatible)</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td>A local Apache Spark install (<code>spark-submit</code> on PATH) + a JDK</td>
+</tr>
+</tbody>
+</table>
+<p>Plus:
+- Python 3.8+
+- Your DAGs folder (from git or a Composer download)
+- Your Spark job files (the separate repo you already have locally)
+- <code>apache-airflow</code> + <code>apache-airflow-providers-google</code> if you use the Airflow integration (you likely already have your own pinned versions)</p>
+<hr />
+<h2 id="2-install">2. Install<a class="headerlink" href="#2-install" title="Permanent link">&para;</a></h2>
+<p>Pick whichever fits your team.</p>
+<h3 id="option-a-from-pypi-once-published">Option A — from PyPI (once published)<a class="headerlink" href="#option-a-from-pypi-once-published" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>save-gcp-local<span class="w">            </span><span class="c1"># core only, zero heavy deps</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;save-gcp-local[data]&quot;</span><span class="w">    </span><span class="c1"># + sample/synthetic data providers (pandas/numpy)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;save-gcp-local[db]&quot;</span><span class="w">      </span><span class="c1"># + database sources (SQLAlchemy)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;save-gcp-local[all]&quot;</span><span class="w">     </span><span class="c1"># everything</span>
+</code></pre></div>
+<h3 id="option-b-from-source-clone-editable">Option B — from source (clone + editable)<a class="headerlink" href="#option-b-from-source-clone-editable" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/EshwarCVS/save-gcp-local
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>save-gcp-local
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[all]&quot;</span><span class="w">               </span><span class="c1"># editable: your edits take effect immediately</span>
+</code></pre></div>
+<h3 id="option-c-from-the-built-wheel-offline-internal-mirror">Option C — from the built wheel (offline / internal mirror)<a class="headerlink" href="#option-c-from-the-built-wheel-offline-internal-mirror" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>save_gcp_local-0.1.0-py3-none-any.whl
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># or with extras:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;save_gcp_local-0.1.0-py3-none-any.whl[all]&quot;</span>
+</code></pre></div>
+<p>Verify:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>save-gcp-local<span class="w"> </span>providers
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># core only      -&gt; none</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># with [data]    -&gt; none, sample, synthetic</span>
+</code></pre></div>
+<hr />
+<h2 id="3-tell-the-library-where-your-things-live">3. Tell the library where YOUR things live<a class="headerlink" href="#3-tell-the-library-where-your-things-live" title="Permanent link">&para;</a></h2>
+<p>Everything is driven by environment variables (so the CLI and the Airflow plugin behave identically). Set these once per shell, or put them in a <code>.env</code> / your Airflow startup script.</p>
+<h3 id="where-do-the-spark-job-files-live">Where do the Spark job files live?<a class="headerlink" href="#where-do-the-spark-job-files-live" title="Permanent link">&para;</a></h3>
+<p>They can be anywhere — and the library handles all of these without you forcing one layout:</p>
+<ul>
+<li><strong>Inside the Airflow repo</strong> (jobs next to DAGs, or in <code>jobs/</code>, <code>spark/</code>, <code>include/</code>, <code>plugins/</code>, <code>src/</code>). When running under Airflow, these are auto-discovered: the resolver searches the DAGs folder, the repo root, and <code>AIRFLOW_HOME</code> automatically.</li>
+<li><strong>A JAR</strong> (Scala/Java) on disk, in the repo or elsewhere.</li>
+<li><strong>A separate repo</strong> somewhere else on the machine.</li>
+<li><strong>A <code>gs://</code> / <code>s3://</code> reference</strong> in the operator — matched locally by its key path or basename.</li>
+</ul>
+<p>You do not need to copy jobs into one folder. Point the resolver at one or more <strong>search roots</strong> and it finds the file wherever it is, mounting that directory into the container automatically:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Jobs live inside the Airflow repo — usually nothing to set; auto-discovered.</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># To be explicit, or to add extra roots (e.g. a separate Scala repo / JAR dir):</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_JOBS_PATH</span><span class="o">=</span><span class="s2">&quot;/path/to/airflow-repo,/path/to/scala-repo/target,/path/to/jars&quot;</span>
+</code></pre></div>
+<p>The resolver tries each root, checking common subfolders (<code>jobs/</code>, <code>spark/</code>, <code>include/</code>, <code>dags/</code>, <code>plugins/</code>, <code>src/</code>), and uses the first match. Relative paths, absolute paths, JARs, and remote URIs all resolve.</p>
+<h3 id="the-core-variables">The core variables<a class="headerlink" href="#the-core-variables" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Required-ish: point at your job code and data</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_JOBS_DIR</span><span class="o">=</span>/abs/path/to/your/spark-repo<span class="w">     </span><span class="c1"># mounted to /jobs in the container</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_DATA_DIR</span><span class="o">=</span>/abs/path/to/test-data<span class="w">           </span><span class="c1"># mounted to /data</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_OUTPUT_DIR</span><span class="o">=</span>/abs/path/to/output<span class="w">            </span><span class="c1"># mounted to /output</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># Choose how jobs run</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_RUNNER</span><span class="o">=</span>docker<span class="w">                             </span><span class="c1"># docker (default) | local</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_DOCKER_IMAGE</span><span class="o">=</span>apache/spark:3.5.0-python3<span class="w">   </span><span class="c1"># any Spark image you trust</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_SPARK_MASTER</span><span class="o">=</span><span class="s2">&quot;local[*]&quot;</span><span class="w">                   </span><span class="c1"># use all cores</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># Master switch</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w">                              </span><span class="c1"># false = passthrough to real GCP</span>
+</code></pre></div>
+<p>Full list of options is in section 8.</p>
+<hr />
+<h2 id="4-run-it-two-entry-points">4. Run it — two entry points<a class="headerlink" href="#4-run-it-two-entry-points" title="Permanent link">&para;</a></h2>
+<h3 id="entry-point-1-the-cli">Entry point 1: the CLI<a class="headerlink" href="#entry-point-1-the-cli" title="Permanent link">&para;</a></h3>
+<p>Good for quick, scripted, one-off runs.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Just apply the interception, then you start Airflow yourself:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span>--jobs-dir<span class="w"> </span>./spark-repo<span class="w"> </span>--data-dir<span class="w"> </span>./data
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>airflow<span class="w"> </span>standalone<span class="w">        </span><span class="c1"># trigger tasks in the UI; Dataproc steps run locally</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># Or run a whole DAG in one shot:</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span>--dags<span class="w"> </span>./dags<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span>--jobs-dir<span class="w"> </span>./spark-repo<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span>--data-dir<span class="w"> </span>./data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span>--dag<span class="w"> </span>my_pipeline<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span>--execution-date<span class="w"> </span><span class="m">2024</span>-06-01
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c1"># Or a single task (fast debugging of one step):</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span>--dags<span class="w"> </span>./dags<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">  </span>--dag<span class="w"> </span>my_pipeline<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span>--task<span class="w"> </span>spark_transform<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">  </span>--execution-date<span class="w"> </span><span class="m">2024</span>-06-01
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="c1"># See exactly what spark-submit WOULD run, without running it:</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span>--dag<span class="w"> </span>my_pipeline<span class="w"> </span>--task<span class="w"> </span>spark_transform<span class="w"> </span>--dry-run
+</code></pre></div>
+<h3 id="entry-point-2-the-airflow-plugin-auto-load">Entry point 2: the Airflow plugin (auto-load)<a class="headerlink" href="#entry-point-2-the-airflow-plugin-auto-load" title="Permanent link">&para;</a></h3>
+<p>Good for matching your real flow: boot Airflow, use the UI as normal.</p>
+<ol>
+<li>Drop a one-line file into your Airflow plugins folder:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># $AIRFLOW_HOME/plugins/save_gcp_local_plugin.py</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">save_gcp_local.airflow_plugin</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>   <span class="c1"># noqa</span>
+</code></pre></div>
+<ol>
+<li>Export the <code>DPL_*</code> vars (section 3).</li>
+<li>Start Airflow however you normally do.</li>
+</ol>
+<p>On startup the logs show:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>[save-gcp-local] Patched N Dataproc operators: DataprocCreateClusterOperator, DataprocSubmitJobOperator, ...
+</code></pre></div>
+<ol>
+<li>Trigger tasks in the UI exactly as before. Variables and Connections resolve normally; only the cluster step is replaced.</li>
+</ol>
+<hr />
+<h2 id="5-provide-test-data-your-choice-this-is-optional">5. Provide test data — your choice (this is optional)<a class="headerlink" href="#5-provide-test-data-your-choice-this-is-optional" title="Permanent link">&para;</a></h2>
+<p>If your jobs read local files you've already staged, skip this entirely (<code>--provider none</code>). Otherwise pick a strategy:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># (a) Do nothing — you stage /data yourself</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>none<span class="w"> </span>--input<span class="w"> </span>mydata.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># (b) SAMPLE: a subset of REAL data, exact values preserved</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span>--input<span class="w"> </span>prod_export.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv<span class="w"> </span>--pct<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># (c) SYNTHETIC: learn the shape of real data, generate MORE rows (no real values copied)</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>synthetic<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span>--input<span class="w"> </span>prod_export.csv<span class="w"> </span>--output<span class="w"> </span>./data/events.csv<span class="w"> </span>--rows<span class="w"> </span><span class="m">500000</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="c1"># From a database table instead of a file:</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">  </span>--jdbc<span class="w"> </span>postgresql://user:pass@host:5432/db<span class="w"> </span>--table<span class="w"> </span>events<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">  </span>--pct<span class="w"> </span><span class="m">2</span><span class="w"> </span>--output<span class="w"> </span>./data/events.csv
+</code></pre></div>
+<h3 id="matching-cloud-paths">Matching cloud paths<a class="headerlink" href="#matching-cloud-paths" title="Permanent link">&para;</a></h3>
+<p>Jobs usually read <code>gs://bucket/events/2024-06-01.csv</code>. The runner rewrites that to <code>/data/events/2024-06-01.csv</code> inside the container. So write your test data to the matching subpath:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>save-gcp-local<span class="w"> </span>gen-data<span class="w"> </span>--provider<span class="w"> </span>sample<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>--input<span class="w"> </span>prod.csv<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span>--output<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DPL_DATA_DIR</span><span class="s2">/events/2024-06-01.csv&quot;</span><span class="w"> </span>--pct<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+<h3 id="bring-your-own-provider">Bring your own provider<a class="headerlink" href="#bring-your-own-provider" title="Permanent link">&para;</a></h3>
+<p>If neither sample nor synthetic fits (e.g. you call an internal anonymization API):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># myteam_provider.py</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">save_gcp_local.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span><span class="p">,</span> <span class="n">DataProvider</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nd">@register</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyProvider</span><span class="p">(</span><span class="n">DataProvider</span><span class="p">):</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;myteam&quot;</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">materialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">):</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>        <span class="c1"># produce data at `dest`, then:</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>        <span class="k">return</span> <span class="n">dest</span>
+</code></pre></div>
+<p>Import it before running, then <code>--provider myteam</code>.</p>
+<hr />
+<h2 id="6-verify-its-actually-running-locally">6. Verify it's actually running locally<a class="headerlink" href="#6-verify-its-actually-running-locally" title="Permanent link">&para;</a></h2>
+<p>Run a single Dataproc task and watch the logs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>save-gcp-local<span class="w"> </span>run<span class="w"> </span>--dag<span class="w"> </span>my_pipeline<span class="w"> </span>--task<span class="w"> </span>spark_transform<span class="w"> </span>--execution-date<span class="w"> </span><span class="m">2024</span>-06-01
+</code></pre></div>
+<p>You should see:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>[save-gcp-local] CreateCluster on task &#39;create_cluster&#39; -&gt; SKIPPED (no GCP cluster, no cost).
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>[save-gcp-local] spark_transform (pyspark) -&gt; running locally (runner=docker)
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>[save-gcp-local] docker run --rm ... spark-submit --master local[*] /jobs/transform.py ...
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>[spark] ... your job output ...
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>[save-gcp-local] spark_transform completed.
+</code></pre></div>
+<p>If you see <code>Patched 0 operators</code>, jump to section 9.</p>
+<hr />
+<h2 id="7-turning-it-off-run-against-real-gcp-again">7. Turning it off (run against real GCP again)<a class="headerlink" href="#7-turning-it-off-run-against-real-gcp-again" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DPL_ENABLED</span><span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
+<p>or delete the plugin file. <strong>Your DAGs were never modified</strong>, so production behavior is identical to before the library existed.</p>
+<hr />
+<h2 id="8-all-configuration-options">8. All configuration options<a class="headerlink" href="#8-all-configuration-options" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Env var</th>
+<th>CLI flag</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DPL_ENABLED</code></td>
+<td><code>--disabled</code> (inverts)</td>
+<td><code>true</code></td>
+<td>Master on/off</td>
+</tr>
+<tr>
+<td><code>DPL_RUNNER</code></td>
+<td><code>--runner</code></td>
+<td><code>docker</code></td>
+<td><code>docker</code> or <code>local</code> (host spark-submit)</td>
+</tr>
+<tr>
+<td><code>DPL_CONTAINER_ENGINE</code></td>
+<td><code>--container-engine</code></td>
+<td><code>auto</code></td>
+<td><code>auto</code> / <code>docker</code> / <code>podman</code> — which container CLI to use for the docker runner</td>
+</tr>
+<tr>
+<td><code>DPL_DOCKER_IMAGE</code></td>
+<td><code>--image</code></td>
+<td><code>apache/spark:3.5.0-python3</code></td>
+<td>Spark image</td>
+</tr>
+<tr>
+<td><code>DPL_SPARK_MASTER</code></td>
+<td><code>--spark-master</code></td>
+<td><code>local[*]</code></td>
+<td>Spark master URL</td>
+</tr>
+<tr>
+<td><code>DPL_JOBS_DIR</code></td>
+<td><code>--jobs-dir</code></td>
+<td><code>./jobs</code></td>
+<td>Primary host dir → <code>/jobs</code></td>
+</tr>
+<tr>
+<td><code>DPL_JOBS_PATH</code></td>
+<td><code>--jobs-path</code></td>
+<td>—</td>
+<td>Extra search roots for job files (comma list); jobs in the Airflow repo, subfolders, other repos, or JARs</td>
+</tr>
+<tr>
+<td><code>DPL_DATA_DIR</code></td>
+<td><code>--data-dir</code></td>
+<td><code>./data</code></td>
+<td>Host dir → <code>/data</code></td>
+</tr>
+<tr>
+<td><code>DPL_OUTPUT_DIR</code></td>
+<td><code>--output-dir</code></td>
+<td><code>./output</code></td>
+<td>Host dir → <code>/output</code></td>
+</tr>
+<tr>
+<td><code>DPL_EXTRA_PACKAGES</code></td>
+<td>—</td>
+<td>—</td>
+<td><code>--packages</code> (comma list)</td>
+</tr>
+<tr>
+<td><code>DPL_EXTRA_JARS</code></td>
+<td>—</td>
+<td>—</td>
+<td>extra <code>--jars</code> (comma list)</td>
+</tr>
+<tr>
+<td><code>DPL_PATH_PREFIXES</code></td>
+<td>—</td>
+<td><code>gs://,s3://,s3a://,abfs://,hdfs://</code></td>
+<td>Remote prefixes rewritten to <code>/data</code></td>
+</tr>
+<tr>
+<td><code>DPL_DOCKER_NETWORK</code></td>
+<td>—</td>
+<td><code>bridge</code></td>
+<td>Docker network</td>
+</tr>
+<tr>
+<td><code>DPL_DOCKER_MEMORY</code></td>
+<td>—</td>
+<td>—</td>
+<td>e.g. <code>8g</code></td>
+</tr>
+<tr>
+<td><code>DPL_DRY_RUN</code></td>
+<td><code>--dry-run</code></td>
+<td><code>false</code></td>
+<td>Print spark-submit, don't execute</td>
+</tr>
+</tbody>
+</table>
+<p>CLI subcommands:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>save-gcp-local run         # apply patches + optionally run a DAG/task
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>save-gcp-local gen-data    # populate test data via a provider
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>save-gcp-local patch       # apply patches only (diagnostic)
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>save-gcp-local providers   # list available data providers
+</code></pre></div>
+<hr />
+<h2 id="9-troubleshooting">9. Troubleshooting<a class="headerlink" href="#9-troubleshooting" title="Permanent link">&para;</a></h2>
+<p><strong><code>Patched 0 Dataproc operators</code></strong>
+- <code>apache-airflow-providers-google</code> not installed in the same environment.
+- <code>DPL_ENABLED=false</code>. Set it <code>true</code>.
+- Running outside Airflow with no provider present (expected for <code>--dry-run</code> smoke tests).</p>
+<p><strong><code>docker: command not found</code> / <code>Cannot connect to the Docker daemon</code></strong>
+- Docker not installed or not running. Either start Docker, or switch to <code>DPL_RUNNER=local</code> if you have a local Spark install.</p>
+<p><strong>Job runs but can't find its input file</strong>
+- The <code>gs://</code> path didn't map to a staged file. Check what path the job actually reads (often an Airflow Variable or <code>--input</code> arg), then stage data at the matching <code>/data/...</code> subpath (section 5).</p>
+<p><strong><code>ClassNotFoundException</code> (Scala)</strong>
+- <code>main_class</code> doesn't match the JAR, or the compiled JAR isn't in <code>DPL_JOBS_DIR</code>.</p>
+<p><strong>Counts/sums look wrong vs production</strong>
+- Expected. You're on sampled/synthetic data on a single machine. Validate logic, not absolute totals. Do a final full run on GCP.</p>
+<p><strong>Job reads BigQuery/GCS directly in code</strong>
+- The runner only rewrites paths it can see in the operator's job spec. If the path is hardcoded inside the job, parameterize it (take an input arg) so it can point at <code>/data</code> locally.</p>
+<hr />
+<h2 id="10-quick-mental-model">10. Quick mental model<a class="headerlink" href="#10-quick-mental-model" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Dataproc</strong> = GCP's job launcher. Can't be local. The library no-ops it.</li>
+<li><strong>Your Spark job</strong> = plain Spark. Runs locally in Spark local mode. The library runs it.</li>
+<li><strong>Test data</strong> = your choice: none / sample / synthetic / your own.</li>
+<li><strong>Iterate locally for logic, validate on GCP once for scale.</strong></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tabs", "navigation.sections", "navigation.top", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
