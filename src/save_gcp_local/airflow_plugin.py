@@ -39,6 +39,14 @@ try:
 except Exception as e:  # never break Airflow startup
     log.warning("[save-gcp-local] patch on import failed: %s", e)
 
+# Set up local connection overrides (GCP mock, local databases, etc.)
+# so DAGs can resolve connections without real cloud credentials.
+try:
+    from .connections import setup_local_connections
+    setup_local_connections()
+except Exception as e:
+    log.debug("[save-gcp-local] connection setup skipped: %s", e)
+
 # Warn when running under Airflow 3.x where the plugin is too late.
 if _detect_airflow_major() >= 3:
     log.warning(
