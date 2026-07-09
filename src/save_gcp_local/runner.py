@@ -85,9 +85,12 @@ class SparkRunner:
         cmd = [self.cfg.spark_submit_cmd, "--master", self.cfg.spark_master]
         if self.cfg.extra_packages:
             cmd += ["--packages", ",".join(self.cfg.extra_packages)]
-        if self.cfg.extra_jars:
-            jars = [self._localize_main(j) for j in self.cfg.extra_jars]
+        jars = [self._localize_main(j) for j in self.cfg.extra_jars]
+        jars.extend(self.cfg.connector_jars)
+        if jars:
             cmd += ["--jars", ",".join(jars)]
+        for conf in self.cfg.spark_conf:
+            cmd += ["--conf", conf]
         return cmd
 
     def _docker_prefix(self) -> List[str]:

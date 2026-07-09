@@ -252,6 +252,7 @@ def cmd_init_astro(args) -> int:
         project_dir,
         force=args.force,
         skip_compose=args.skip_compose,
+        engine=getattr(args, "engine", "auto"),
     )
 
     log.info("save-gcp-local: Astro project scaffolded in %s\n", project_dir)
@@ -332,6 +333,8 @@ def build_parser() -> argparse.ArgumentParser:
                      help="Overwrite existing generated files")
     ia_.add_argument("--skip-compose", action="store_true",
                      help="Don't generate docker-compose.override.yml")
+    ia_.add_argument("--engine", choices=["auto", "docker", "podman"], default="auto",
+                     help="Container engine to configure (default: auto-detect)")
     ia_.set_defaults(func=cmd_init_astro)
 
     # run

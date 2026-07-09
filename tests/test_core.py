@@ -223,3 +223,40 @@ def test_extra_submit_operators_config(tmp_path):
     cfg = Config()
     assert cfg.extra_submit_operators == ["my.pkg.Op", "other.pkg.Op2"]
     os.environ.pop("DPL_EXTRA_SUBMIT_OPERATORS", None)
+
+
+def test_connector_jars_config(tmp_path):
+    os.environ["DPL_CONNECTOR_JARS"] = "/opt/jars/hive.jar,/opt/jars/os.jar"
+    from save_gcp_local.config import Config
+    cfg = Config()
+    assert cfg.connector_jars == ["/opt/jars/hive.jar", "/opt/jars/os.jar"]
+    os.environ.pop("DPL_CONNECTOR_JARS", None)
+
+
+def test_spark_conf_config(tmp_path):
+    os.environ["DPL_SPARK_CONF"] = "spark.hadoop.hive.metastore.uris=thrift://h:9083,spark.sql.catalogImplementation=hive"
+    from save_gcp_local.config import Config
+    cfg = Config()
+    assert len(cfg.spark_conf) == 2
+    assert "spark.hadoop.hive.metastore.uris=thrift://h:9083" in cfg.spark_conf
+    os.environ.pop("DPL_SPARK_CONF", None)
+
+
+def test_spark_conf_in_submit_cmd(tmp_path):
+    os.environ["DPL_SPARK_CONF"] = "spark.sql.catalogImplementation=hive"
+    r = make_runner(tmp_path, runner="local")
+    cmd = r.build_pyspark("gs://b/main.py", [])
+    assert "--conf" in cmd
+    idx = cmd.index("--conf")
+    assert cmd[idx + 1] == "spark.sql.catalogImplementation=hive"
+    os.environ.pop("DPL_SPARK_CONF", None)
+
+
+def test_connector_jars_in_submit_cmd(tmp_path):
+    os.environ["DPL_CONNECTOR_JARS"] = "/opt/jars/test.jar"
+    r = make_runner(tmp_path, runner="local")
+    cmd = r.build_pyspark("gs://b/main.py", [])
+    assert "--jars" in cmd
+    idx = cmd.index("--jars")
+    assert "/opt/jars/test.jar" in cmd[idx + 1]
+    os.environ.pop("DPL_CONNECTOR_JARS", None)
