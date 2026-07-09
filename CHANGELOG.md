@@ -3,6 +3,21 @@
 All notable changes to this project are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-07-09
+
+### Added
+- **Data connectors** — pluggable connectors for pulling sample data from remote sources into the local data directory for testing. Connectors auto-dispatch based on URI scheme.
+  - **GCS connector** (`gs://`) — pull files/prefixes from Google Cloud Storage with tabular sampling
+  - **S3 connector** (`s3://`, `s3a://`) — pull from AWS S3 with tabular sampling
+  - **Azure Blob connector** (`abfs://`, `abfss://`, `wasbs://`) — pull from Azure Blob Storage / ADLS
+  - **Hive connector** (`hive://`) — pull from Hive metastore tables via PyHive or SQLAlchemy
+  - **JDBC connector** (`postgresql://`, `mysql://`, `jdbc:`) — pull from any SQLAlchemy-supported database
+- **`pull-data` CLI command** — pull sample data from any supported source with `--sample-size` (0.0-1.0 fraction)
+- **Batch pull mode** — define multiple data sources in a YAML/JSON config file and pull them all at once with `--config`
+- **`connectors` CLI command** — list available connectors and their URI schemes
+- **Custom connectors** — subclass `Connector`, implement `pull()`, and register with `@register`
+- New optional dependency groups: `[gcs]`, `[s3]`, `[azure]`, `[hive]`, `[yaml]`, `[connectors]`
+
 ## [0.2.1] - 2026-06-05
 
 ### Added

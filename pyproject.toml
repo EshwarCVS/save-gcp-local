@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "save-gcp-local"
-version = "0.2.1"
-description = "Run Airflow DAGs locally and execute Dataproc/Spark jobs in local Docker instead of creating GCP clusters. Generic, zero DAG edits, pluggable test-data providers."
+version = "0.3.0"
+description = "Run Airflow DAGs locally and execute Dataproc/Spark jobs in local Docker instead of creating GCP clusters. Pull sample data from GCS, S3, Azure, Hive, and databases. Generic, zero DAG edits."
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
 authors = [{ name = "save-gcp-local contributors" }]
-keywords = ["airflow", "dataproc", "spark", "local", "docker", "testing", "gcp"]
+keywords = ["airflow", "dataproc", "spark", "local", "docker", "testing", "gcp", "connectors", "s3", "azure", "hive"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
@@ -24,12 +24,24 @@ dependencies = []
 [project.optional-dependencies]
 # Data sampling / synthetic generation
 data = ["pandas>=1.3", "numpy>=1.20"]
-# Database sources for the data providers
-db = ["sqlalchemy>=1.4"]
+# Database sources for data providers and JDBC connector
+db = ["pandas>=1.3", "sqlalchemy>=1.4"]
+# Google Cloud Storage connector
+gcs = ["pandas>=1.3", "google-cloud-storage>=2.0"]
+# AWS S3 connector
+s3 = ["pandas>=1.3", "boto3>=1.20"]
+# Azure Blob / ADLS connector
+azure = ["pandas>=1.3", "azure-storage-blob>=12.0", "azure-identity>=1.10"]
+# Hive connector
+hive = ["pandas>=1.3", "pyhive>=0.7", "thrift>=0.16"]
+# YAML config support for pull-data
+yaml = ["pyyaml>=5.0"]
 # Airflow integration (users usually already have their own pinned airflow)
 airflow = ["apache-airflow>=2.3", "apache-airflow-providers-google>=8.0"]
+# All connectors + data providers
+connectors = ["pandas>=1.3", "numpy>=1.20", "sqlalchemy>=1.4", "pyyaml>=5.0"]
 # Everything
-all = ["pandas>=1.3", "numpy>=1.20", "sqlalchemy>=1.4"]
+all = ["pandas>=1.3", "numpy>=1.20", "sqlalchemy>=1.4", "pyyaml>=5.0"]
 dev = ["pytest>=7", "build", "twine", "ruff"]
 docs = ["mkdocs-material"]
 
