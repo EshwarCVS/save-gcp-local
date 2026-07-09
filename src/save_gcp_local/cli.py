@@ -1,10 +1,12 @@
 """Command-line interface for save-gcp-local.
 
 Subcommands:
-  run        boot patching + run a DAG/task locally (or just set up the env)
-  gen-data   populate test data via a chosen provider (none/sample/synthetic/BYO)
-  patch      print which Dataproc operators would be patched (diagnostic)
-  providers  list available data providers
+  run          boot patching + run a DAG/task locally (or just set up the env)
+  gen-data     populate test data via a chosen provider (none/sample/synthetic/BYO)
+  pull-data    pull sample data from remote sources (GCS, S3, Azure, Hive, DB)
+  connectors   list available data connectors
+  patch        print which Dataproc operators would be patched (diagnostic)
+  providers    list available data providers
 """
 
 from __future__ import annotations
@@ -114,6 +116,123 @@ def cmd_providers(args) -> int:
     return 0
 
 
+# -------------------------------------------------------------- pull-data
+def cmd_pull_data(args) -> int:
+    from .connectors import resolve_connector, get_connector, available as conn_available
+
+    if args.config:
+        return _pull_from_config(args)
+
+    if not args.source:
+        log.error("--source is required (or use --config for batch mode)")
+        return 2
+
+    connector = resolve_connector(args.source)
+    if connector is None:
+        if args.connector:
+            try:
+                connector = get_connector(args.connector)
+            except KeyError:
+                log.error("Unknown connector '%s'. Available: %s", args.connector, conn_available())
+                return 2
+        else:
+            log.error(
+                "Cannot determine connector for URI '%s'. "
+                "Available connectors: %s. Use --connector to specify explicitly.",
+                args.source, conn_available(),
+            )
+            return 2
+
+    sample_size = args.sample_size
+    dest = args.dest or _default_dest(args.source, args.data_dir)
+
+    opts = {}
+    if args.table:
+        opts["table"] = args.table
+    if args.query:
+        opts["query"] = args.query
+    if args.limit:
+        opts["limit"] = args.limit
+
+    try:
+        result = connector.pull(args.source, dest, sample_size=sample_size,
+                                seed=args.seed, **opts)
+        log.info("save-gcp-local: data pulled -> %s (sample_size=%.2f)", result, sample_size)
+        return 0
+    except Exception as e:
+        log.error("save-gcp-local: pull-data failed: %s", e)
+        return 1
+
+
+def _pull_from_config(args) -> int:
+    from .pull_config import load_pull_config
+    from .connectors import resolve_connector
+
+    config = load_pull_config(args.config)
+    override_sample = args.sample_size if args.sample_size != 1.0 else None
+    failed = 0
+
+    for spec in config.sources:
+        sample_size = override_sample or spec.sample_size or config.default_sample_size
+        connector = resolve_connector(spec.uri)
+        if connector is None:
+            log.error("No connector for source '%s' (uri=%s)", spec.name, spec.uri)
+            failed += 1
+            continue
+
+        opts = {}
+        if spec.table:
+            opts["table"] = spec.table
+        if spec.query:
+            opts["query"] = spec.query
+        if spec.limit:
+            opts["limit"] = spec.limit
+
+        try:
+            connector.pull(spec.uri, spec.dest, sample_size=sample_size,
+                           seed=config.seed, **opts)
+            log.info("  [%s] -> %s (%.0f%% sample)", spec.name, spec.dest, sample_size * 100)
+        except Exception as e:
+            log.error("  [%s] FAILED: %s", spec.name, e)
+            failed += 1
+
+    if failed:
+        log.error("save-gcp-local: %d source(s) failed", failed)
+        return 1
+    log.info("save-gcp-local: all %d sources pulled successfully", len(config.sources))
+    return 0
+
+
+def _default_dest(source: str, data_dir: str = None) -> str:
+    """Derive a default destination path from the source URI."""
+    import os
+    data_dir = data_dir or os.environ.get("DPL_DATA_DIR", "./data")
+    for prefix in ("gs://", "s3://", "s3a://", "abfs://", "abfss://", "wasbs://", "hive://"):
+        if source.startswith(prefix):
+            rest = source[len(prefix):]
+            parts = rest.split("/", 1)
+            key = parts[1] if len(parts) > 1 else parts[0]
+            return os.path.join(data_dir, key)
+    return os.path.join(data_dir, os.path.basename(source))
+
+
+# -------------------------------------------------------------- connectors
+def cmd_connectors(args) -> int:
+    from .connectors import available_detail
+    details = available_detail()
+    if not details:
+        log.info("No connectors available. Install optional dependencies:")
+        log.info("  pip install 'save-gcp-local[gcs]'    # Google Cloud Storage")
+        log.info("  pip install 'save-gcp-local[s3]'     # AWS S3")
+        log.info("  pip install 'save-gcp-local[azure]'  # Azure Blob/ADLS")
+        log.info("  pip install 'save-gcp-local[db]'     # JDBC databases")
+        return 0
+    log.info("Available data connectors:")
+    for name, schemes in details.items():
+        log.info("  %-10s  %s", name, ", ".join(schemes))
+    return 0
+
+
 # --------------------------------------------------------- install-airflow3
 def cmd_install_airflow3(args) -> int:
     """Install a .pth file so Airflow 3.x applies patches before DAG parsing.
@@ -192,6 +311,26 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--table", help="Table name with --jdbc")
     g.add_argument("--limit", type=int, help="Row cap when loading")
     g.set_defaults(func=cmd_gen_data)
+
+    # pull-data
+    pd_ = sub.add_parser("pull-data",
+                         help="Pull sample data from remote sources into local data dir.")
+    pd_.add_argument("--source", help="Source URI (gs://, s3://, abfs://, hive://, postgresql://, etc.)")
+    pd_.add_argument("--dest", help="Local destination path (default: derived from source)")
+    pd_.add_argument("--sample-size", type=float, default=1.0,
+                     help="Fraction of data to pull: 0.0-1.0 (e.g. 0.2 = 20%%). Default: 1.0 (all)")
+    pd_.add_argument("--connector", help="Force a specific connector (gcs, s3, azure, hive, jdbc)")
+    pd_.add_argument("--table", help="Table name (for JDBC/Hive connectors)")
+    pd_.add_argument("--query", help="Custom SQL query (for JDBC/Hive connectors)")
+    pd_.add_argument("--limit", type=int, help="Row limit (for JDBC/Hive connectors)")
+    pd_.add_argument("--seed", type=int, default=42, help="Random seed for sampling")
+    pd_.add_argument("--config", help="YAML/JSON config file defining multiple sources")
+    pd_.add_argument("--data-dir", help="Base data directory (default: DPL_DATA_DIR or ./data)")
+    pd_.set_defaults(func=cmd_pull_data)
+
+    # connectors
+    cn = sub.add_parser("connectors", help="List available data connectors.")
+    cn.set_defaults(func=cmd_connectors)
 
     # patch
     pt = sub.add_parser("patch", help="Apply patches (diagnostic).")

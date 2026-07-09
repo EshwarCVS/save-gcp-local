@@ -1,0 +1,41 @@
+# Example: pull-data source configuration.
+#
+# Pull sample data from multiple remote sources in one command:
+#   save-gcp-local pull-data --config examples/dpl-sources.yaml
+#
+# Each source specifies a URI, a local destination, and an optional sample_size
+# (0.0-1.0).  Sources that omit sample_size inherit default_sample_size.
+
+default_sample_size: 0.2    # pull 20% of each source by default
+seed: 42                    # reproducible sampling
+
+sources:
+  # Google Cloud Storage — pull a CSV file at 20% sample
+  events:
+    uri: gs://my-project-bucket/data/events/2024-06-01.csv
+    dest: ./data/events/2024-06-01.csv
+
+  # AWS S3 — pull all files under a prefix at 30% sample
+  raw_logs:
+    uri: s3://my-data-lake/raw/logs/
+    dest: ./data/raw/logs/
+    sample_size: 0.3
+
+  # Azure Blob — pull a Parquet file at default sample
+  transactions:
+    uri: abfss://container@myaccount.dfs.core.windows.net/data/transactions.parquet
+    dest: ./data/transactions.parquet
+
+  # Hive table — pull from a Hive metastore
+  user_profiles:
+    uri: hive://hive-server:10000/analytics/user_profiles
+    dest: ./data/user_profiles.csv
+    sample_size: 0.1
+
+  # PostgreSQL table — pull from a database
+  orders:
+    uri: postgresql://readonly:password@db-host:5432/warehouse
+    table: orders
+    dest: ./data/orders.parquet
+    sample_size: 0.05
+    limit: 100000              # cap at 100k rows before sampling
