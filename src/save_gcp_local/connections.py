@@ -40,6 +40,29 @@ _DEFAULT_OVERRIDES: Dict[str, dict] = {
         }),
         "description": "[save-gcp-local] Mock Dataproc connection — operators are patched",
     },
+    "hive_default": {
+        "conn_type": "hiveserver2",
+        "host": "local-hive",
+        "port": 9083,
+        "login": "hive",
+        "schema": "default",
+        "description": "[save-gcp-local] Local Hive metastore for dev/test",
+    },
+    "opensearch_default": {
+        "conn_type": "http",
+        "host": "local-opensearch",
+        "port": 9200,
+        "description": "[save-gcp-local] Local OpenSearch for dev/test",
+    },
+    "mssql_default": {
+        "conn_type": "mssql",
+        "host": "local-mssql",
+        "port": 1433,
+        "login": "sa",
+        "password": "LocalPass#123",
+        "schema": "master",
+        "description": "[save-gcp-local] Local SQL Server (Azure DB equivalent) for dev/test",
+    },
 }
 
 

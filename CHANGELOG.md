@@ -3,6 +3,19 @@
 All notable changes to this project are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] - 2026-07-09
+
+### Added
+- **Full local service stack** — `docker-compose.override.yml` now includes Hive Metastore, OpenSearch, and SQL Server (Azure DB equivalent) alongside PostgreSQL. All services start with `astro dev start` — zero manual setup.
+- **Spark connector JARs pre-installed** — Dockerfile now downloads PostgreSQL, SQL Server (MSSQL), and MySQL JDBC connector JARs into `$SPARK_HOME/jars/` so Spark jobs can talk to all local services out of the box.
+- **Hive, OpenSearch, and MSSQL connection defaults** — `connections.py` auto-creates `hive_default`, `opensearch_default`, and `mssql_default` Airflow connections pointing to local services. DAGs using these connections work without manual setup.
+- **Airflow Variables auto-import** — new `variables.py` module sets `AIRFLOW_VAR_*` env vars from a JSON file (`DPL_VARIABLES_FILE`) or `DPL_VAR_*` env vars. DAGs calling `Variable.get()` work locally without manual Variable creation in the UI.
+- **`DPL_SPARK_CONF`** — comma-separated `key=value` pairs passed as `--conf` flags to `spark-submit`. Pre-configured with Hive metastore URI and catalog implementation in scaffolded projects.
+- **`DPL_CONNECTOR_JARS`** — additional connector JARs outside `$SPARK_HOME/jars/` auto-included in `--jars` flag.
+- **`--engine` flag for `init-astro`** — choose `docker` or `podman` container engine at scaffolding time. Sets `DPL_CONTAINER_ENGINE` in `.env`.
+- **`include/local_variables.json`** — scaffolded with default Variables (Hive metastore URI, OpenSearch host, MSSQL host, GCP project, environment=local).
+- Plugin now auto-loads Variables on Airflow startup alongside connections.
+
 ## [0.3.0] - 2026-07-09
 
 ### Added

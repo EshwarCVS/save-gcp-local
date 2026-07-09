@@ -10,5 +10,5 @@ from .config import Config, load_config
 from .runner import SparkRunner
 from .airflow_patch import apply_patches
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __all__ = ["Config", "load_config", "SparkRunner", "apply_patches", "__version__"]

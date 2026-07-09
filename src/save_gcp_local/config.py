@@ -54,6 +54,9 @@ class Config:
                                  e.g. bfdms.dpaas.BFDMSDataprocCreateClusterOperator
       DPL_EXTRA_SUBMIT_OPERATORS comma-sep FQCNs of custom operators to run locally
                                  e.g. my.pkg.CustomSubmitOperator
+      DPL_CONNECTOR_JARS         comma list of connector JARs outside SPARK_HOME/jars/
+      DPL_SPARK_CONF             comma list of key=value Spark --conf flags
+                                 e.g. spark.hadoop.hive.metastore.uris=thrift://host:9083
     """
 
     enabled: bool = field(default_factory=lambda: _env_bool("DPL_ENABLED", True))
@@ -100,6 +103,17 @@ class Config:
     # with docker, so 'podman' works as a drop-in. Default auto-detects.
     container_engine: str = field(
         default_factory=lambda: os.environ.get("DPL_CONTAINER_ENGINE", "auto")
+    )
+    # Connector JARs for Spark to talk to external services (Hive, OpenSearch,
+    # databases).  JARs in $SPARK_HOME/jars/ are auto-classpathd; this list is
+    # for JARs outside that directory.
+    connector_jars: List[str] = field(
+        default_factory=lambda: _env_list("DPL_CONNECTOR_JARS")
+    )
+    # Arbitrary Spark --conf key=value pairs.  Useful for Hive metastore URI,
+    # catalog implementation, etc.
+    spark_conf: List[str] = field(
+        default_factory=lambda: _env_list("DPL_SPARK_CONF")
     )
     # Extra operators from custom packages to patch as no-ops or local submits.
     extra_noop_operators: List[str] = field(

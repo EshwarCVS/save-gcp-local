@@ -47,6 +47,13 @@ try:
 except Exception as e:
     log.debug("[save-gcp-local] connection setup skipped: %s", e)
 
+# Set up local Airflow Variables (AIRFLOW_VAR_*) from config file / DPL_VAR_*.
+try:
+    from .variables import setup_local_variables
+    setup_local_variables()
+except Exception as e:
+    log.debug("[save-gcp-local] variable setup skipped: %s", e)
+
 # Warn when running under Airflow 3.x where the plugin is too late.
 if _detect_airflow_major() >= 3:
     log.warning(

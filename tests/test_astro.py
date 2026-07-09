@@ -1,4 +1,4 @@
-"""Tests for Astro CLI scaffolding and connection patching."""
+"""Tests for Astro CLI scaffolding, connection patching, and variable support."""
 
 import json
 import os
@@ -9,7 +9,6 @@ import pytest
 # --------------------------------------------------------- astro scaffolding
 def test_scaffold_creates_all_files(tmp_path):
     """init-astro generates the expected files in the project directory."""
-    # Create a minimal Astro project skeleton
     (tmp_path / "Dockerfile").write_text("FROM quay.io/astronomer/astro-runtime:12.0.0\n")
     (tmp_path / "requirements.txt").write_text("apache-airflow-providers-google\n")
     (tmp_path / "plugins").mkdir()
@@ -24,6 +23,7 @@ def test_scaffold_creates_all_files(tmp_path):
     assert results[".env"] == "created"
     assert results["docker-compose.override.yml"] == "created"
     assert results["include/local_connections.json"] == "created"
+    assert results["include/local_variables.json"] == "created"
     assert results["requirements.txt"] == "updated"
 
     # Verify Dockerfile was appended
@@ -31,27 +31,47 @@ def test_scaffold_creates_all_files(tmp_path):
     assert "save-gcp-local" in content
     assert "SPARK_HOME" in content
     assert "openjdk" in content
+    assert "postgresql-42.7.1.jar" in content
+    assert "mssql-jdbc" in content
 
     # Verify plugin file
     assert (tmp_path / "plugins" / "save_gcp_local_plugin.py").exists()
     plugin_content = (tmp_path / "plugins" / "save_gcp_local_plugin.py").read_text()
     assert "airflow_plugin" in plugin_content
     assert "setup_local_connections" in plugin_content
+    assert "setup_local_variables" in plugin_content
 
     # Verify .env
     env_content = (tmp_path / ".env").read_text()
     assert "DPL_ENABLED=true" in env_content
     assert "DPL_RUNNER=local" in env_content
     assert "DPL_SPARK_SUBMIT_CMD" in env_content
+    assert "DPL_SPARK_CONF" in env_content
+    assert "hive.metastore.uris" in env_content
+    assert "DPL_VARIABLES_FILE" in env_content
 
     # Verify docker-compose
     compose = (tmp_path / "docker-compose.override.yml").read_text()
     assert "local-postgres" in compose
+    assert "local-hive" in compose
+    assert "local-opensearch" in compose
+    assert "local-mssql" in compose
 
     # Verify connections
     conn = json.loads((tmp_path / "include" / "local_connections.json").read_text())
     assert "google_cloud_default" in conn
     assert "local_postgres" in conn
+    assert "hive_default" in conn
+    assert "opensearch_default" in conn
+    assert "mssql_default" in conn
+
+    # Verify variables
+    variables = json.loads((tmp_path / "include" / "local_variables.json").read_text())
+    assert "hive_metastore_uri" in variables
+    assert "opensearch_host" in variables
+    assert "mssql_host" in variables
+    assert "environment" in variables
+    assert variables["environment"] == "local"
 
     # Verify include dirs created
     assert (tmp_path / "include" / "jobs").is_dir()
@@ -80,6 +100,7 @@ def test_scaffold_idempotent(tmp_path):
 
     assert results["Dockerfile"] == "already patched"
     assert results["plugins/save_gcp_local_plugin.py"] == "exists"
+    assert results["include/local_variables.json"] == "exists"
     assert content_after_first == content_after_second
 
 
@@ -107,6 +128,30 @@ def test_scaffold_force_overwrites(tmp_path):
     assert "airflow_plugin" in plugin_path.read_text()
 
 
+def test_scaffold_engine_podman(tmp_path):
+    """--engine podman sets DPL_CONTAINER_ENGINE in .env."""
+    (tmp_path / "Dockerfile").write_text("FROM base\n")
+    (tmp_path / "plugins").mkdir()
+
+    from save_gcp_local.astro import scaffold_astro_project
+    scaffold_astro_project(str(tmp_path), engine="podman")
+
+    env_content = (tmp_path / ".env").read_text()
+    assert "DPL_CONTAINER_ENGINE=podman" in env_content
+
+
+def test_scaffold_engine_auto_commented(tmp_path):
+    """Default engine=auto leaves DPL_CONTAINER_ENGINE commented out."""
+    (tmp_path / "Dockerfile").write_text("FROM base\n")
+    (tmp_path / "plugins").mkdir()
+
+    from save_gcp_local.astro import scaffold_astro_project
+    scaffold_astro_project(str(tmp_path), engine="auto")
+
+    env_content = (tmp_path / ".env").read_text()
+    assert "# DPL_CONTAINER_ENGINE=auto" in env_content
+
+
 # ----------------------------------------------------- connection patching
 def test_apply_connection_overrides_sets_env():
     from save_gcp_local.connections import apply_connection_overrides
@@ -128,15 +173,35 @@ def test_apply_connection_overrides_sets_env():
 def test_apply_defaults_creates_gcp_connection():
     from save_gcp_local.connections import apply_connection_overrides
 
-    # Clear any existing
-    os.environ.pop("AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT", None)
+    for key in list(os.environ.keys()):
+        if key.startswith("AIRFLOW_CONN_"):
+            os.environ.pop(key, None)
 
     count = apply_connection_overrides(include_defaults=True)
     assert count >= 1
     assert "AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT" in os.environ
 
-    os.environ.pop("AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT", None)
-    os.environ.pop("AIRFLOW_CONN_GOOGLE_CLOUD_DATAPROC_DEFAULT", None)
+    for key in list(os.environ.keys()):
+        if key.startswith("AIRFLOW_CONN_"):
+            os.environ.pop(key, None)
+
+
+def test_apply_defaults_includes_hive_opensearch_mssql():
+    from save_gcp_local.connections import apply_connection_overrides
+
+    for key in list(os.environ.keys()):
+        if key.startswith("AIRFLOW_CONN_"):
+            os.environ.pop(key, None)
+
+    count = apply_connection_overrides(include_defaults=True)
+    assert count >= 5
+    assert "AIRFLOW_CONN_HIVE_DEFAULT" in os.environ
+    assert "AIRFLOW_CONN_OPENSEARCH_DEFAULT" in os.environ
+    assert "AIRFLOW_CONN_MSSQL_DEFAULT" in os.environ
+
+    for key in list(os.environ.keys()):
+        if key.startswith("AIRFLOW_CONN_"):
+            os.environ.pop(key, None)
 
 
 def test_apply_skips_existing_env():
@@ -227,6 +292,92 @@ def test_build_connection_uri_minimal():
     assert uri == "google_cloud_platform://"
 
 
+# --------------------------------------------------------- variables
+def test_apply_variable_overrides():
+    from save_gcp_local.variables import apply_variable_overrides
+
+    os.environ.pop("AIRFLOW_VAR_TEST_VAR_XYZ", None)
+
+    count = apply_variable_overrides({"test_var_xyz": "hello"})
+    assert count == 1
+    assert os.environ["AIRFLOW_VAR_TEST_VAR_XYZ"] == "hello"
+
+    os.environ.pop("AIRFLOW_VAR_TEST_VAR_XYZ", None)
+
+
+def test_dpl_var_env_vars():
+    from save_gcp_local.variables import apply_variable_overrides
+
+    os.environ["DPL_VAR_MY_SETTING"] = "value123"
+    os.environ.pop("AIRFLOW_VAR_MY_SETTING", None)
+
+    count = apply_variable_overrides()
+    assert count >= 1
+    assert os.environ["AIRFLOW_VAR_MY_SETTING"] == "value123"
+
+    os.environ.pop("AIRFLOW_VAR_MY_SETTING", None)
+    os.environ.pop("DPL_VAR_MY_SETTING", None)
+
+
+def test_variable_skip_existing():
+    from save_gcp_local.variables import apply_variable_overrides
+
+    os.environ["AIRFLOW_VAR_SKIPVAR"] = "already_set"
+    os.environ.pop("DPL_FORCE_VARIABLES", None)
+
+    count = apply_variable_overrides({"skipvar": "new_value"})
+    assert count == 0
+    assert os.environ["AIRFLOW_VAR_SKIPVAR"] == "already_set"
+
+    os.environ.pop("AIRFLOW_VAR_SKIPVAR", None)
+
+
+def test_variable_force_override():
+    from save_gcp_local.variables import apply_variable_overrides
+
+    os.environ["AIRFLOW_VAR_FORCEVAR"] = "old_value"
+    os.environ["DPL_FORCE_VARIABLES"] = "true"
+
+    count = apply_variable_overrides({"forcevar": "new_value"})
+    assert count == 1
+    assert os.environ["AIRFLOW_VAR_FORCEVAR"] == "new_value"
+
+    os.environ.pop("AIRFLOW_VAR_FORCEVAR", None)
+    os.environ.pop("DPL_FORCE_VARIABLES", None)
+
+
+def test_load_variables_file(tmp_path):
+    from save_gcp_local.variables import load_variables_file
+
+    var_file = tmp_path / "variables.json"
+    data = {
+        "string_var": "hello",
+        "json_var": {"key": "value"},
+        "number_var": 42,
+    }
+    var_file.write_text(json.dumps(data))
+
+    result = load_variables_file(str(var_file))
+    assert result["string_var"] == "hello"
+    assert result["json_var"] == '{"key": "value"}'
+    assert result["number_var"] == "42"
+
+
+def test_setup_local_variables_with_file(tmp_path):
+    from save_gcp_local.variables import setup_local_variables
+
+    var_file = tmp_path / "variables.json"
+    var_file.write_text(json.dumps({"test_setup_var": "from_file"}))
+
+    os.environ.pop("AIRFLOW_VAR_TEST_SETUP_VAR", None)
+
+    count = setup_local_variables(str(var_file))
+    assert count >= 1
+    assert os.environ["AIRFLOW_VAR_TEST_SETUP_VAR"] == "from_file"
+
+    os.environ.pop("AIRFLOW_VAR_TEST_SETUP_VAR", None)
+
+
 # --------------------------------------------------------- CLI integration
 def test_cli_init_astro_no_dockerfile():
     from save_gcp_local.cli import main
@@ -245,3 +396,17 @@ def test_cli_init_astro_full(tmp_path):
 
     assert (tmp_path / "plugins" / "save_gcp_local_plugin.py").exists()
     assert "DPL_ENABLED" in (tmp_path / ".env").read_text()
+    assert (tmp_path / "include" / "local_variables.json").exists()
+
+
+def test_cli_init_astro_with_engine(tmp_path):
+    (tmp_path / "Dockerfile").write_text("FROM quay.io/astronomer/astro-runtime:12.0.0\n")
+    (tmp_path / "plugins").mkdir()
+    (tmp_path / "requirements.txt").write_text("")
+
+    from save_gcp_local.cli import main
+    rc = main(["init-astro", "--engine", "podman", str(tmp_path)])
+    assert rc == 0
+
+    env_content = (tmp_path / ".env").read_text()
+    assert "DPL_CONTAINER_ENGINE=podman" in env_content
