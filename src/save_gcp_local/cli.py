@@ -1,6 +1,7 @@
 """Command-line interface for save-gcp-local.
 
 Subcommands:
+  init-astro   scaffold an Astro CLI project for local Dataproc development
   run          boot patching + run a DAG/task locally (or just set up the env)
   gen-data     populate test data via a chosen provider (none/sample/synthetic/BYO)
   pull-data    pull sample data from remote sources (GCS, S3, Azure, Hive, DB)
@@ -233,6 +234,44 @@ def cmd_connectors(args) -> int:
     return 0
 
 
+# -------------------------------------------------------------- init-astro
+def cmd_init_astro(args) -> int:
+    from .astro import scaffold_astro_project
+
+    project_dir = os.path.abspath(args.project_dir)
+    dockerfile = os.path.join(project_dir, "Dockerfile")
+    if not os.path.exists(dockerfile) and not args.force:
+        log.error(
+            "No Dockerfile found in '%s'. Is this an Astro project?\n"
+            "  Run `astro dev init` first, or use --force to scaffold anyway.",
+            project_dir,
+        )
+        return 2
+
+    results = scaffold_astro_project(
+        project_dir,
+        force=args.force,
+        skip_compose=args.skip_compose,
+    )
+
+    log.info("save-gcp-local: Astro project scaffolded in %s\n", project_dir)
+    for filename, status in results.items():
+        icon = {"created": "+", "patched": "~", "updated": "~",
+                "exists": ".", "already patched": ".", "already present": ".",
+                "not found": "?"}.get(status, " ")
+        log.info("  [%s] %-40s %s", icon, filename, status)
+
+    log.info("")
+    log.info("Next steps:")
+    log.info("  1. Put your Spark job files in include/jobs/")
+    log.info("  2. Put your test data in include/data/")
+    log.info("  3. Run: astro dev start")
+    log.info("  4. Trigger DAGs in the Airflow UI — Dataproc steps run locally")
+    log.info("")
+    log.info("  Set DPL_ENABLED=false in .env to switch back to real GCP.")
+    return 0
+
+
 # --------------------------------------------------------- install-airflow3
 def cmd_install_airflow3(args) -> int:
     """Install a .pth file so Airflow 3.x applies patches before DAG parsing.
@@ -276,6 +315,24 @@ def build_parser() -> argparse.ArgumentParser:
         description="Run Airflow DAGs locally; execute Dataproc/Spark jobs in local Docker.",
     )
     sub = p.add_subparsers(dest="command", required=True)
+
+    # init-astro
+    ia_ = sub.add_parser(
+        "init-astro",
+        help="Scaffold an Astro CLI project for local Dataproc development.",
+        description=(
+            "Generates Dockerfile additions, Airflow plugin, .env config, "
+            "docker-compose.override.yml for local services, and connection "
+            "overrides.  Run this inside an existing Astro project (after `astro dev init`)."
+        ),
+    )
+    ia_.add_argument("project_dir", nargs="?", default=".",
+                     help="Path to the Astro project root (default: current directory)")
+    ia_.add_argument("--force", action="store_true",
+                     help="Overwrite existing generated files")
+    ia_.add_argument("--skip-compose", action="store_true",
+                     help="Don't generate docker-compose.override.yml")
+    ia_.set_defaults(func=cmd_init_astro)
 
     # run
     r = sub.add_parser("run", help="Apply patching and optionally run a DAG/task.")
