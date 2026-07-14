@@ -7,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org)
 
+> **[Interactive Demo](https://claude.ai/code/artifact/beca3443-ec2b-4ae8-9fdb-c315adf8266a)** — see how it works, setup steps, cost comparison, and data connectors in one page.
+
 ---
 
 ## Why this exists
@@ -213,6 +215,7 @@ save-gcp-local connectors    # list what's available in your install
 
 ## Documentation
 
+- **[Interactive Demo](https://claude.ai/code/artifact/beca3443-ec2b-4ae8-9fdb-c315adf8266a)** — visual walkthrough with live examples
 - **[QUICKSTART.md](QUICKSTART.md)** — 5-minute setup
 - **[SETUP.md](SETUP.md)** — full guide: install options, config, both entry points, test-data strategies, troubleshooting
 - **[CICD.md](CICD.md)** — CI/CD pipeline, release process, branch protection
